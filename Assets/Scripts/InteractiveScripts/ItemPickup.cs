@@ -50,9 +50,10 @@ public class ItemPickup : MonoBehaviour
     {
         JumpItemPickup = true;
 
+        // Call the AddJumps method from PlayerShmove to add 3 jumps
         if (playerShmove != null)
         {
-            playerShmove.AddJumps(3);
+            playerShmove.AddJumps(3); // You can adjust the number of jumps as needed
         }
     }
 }

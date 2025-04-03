@@ -20,8 +20,9 @@ public class PlayerShmove : MonoBehaviour
 
     Rigidbody rb;
 
-    private int maxJumps = 3;
-    private int currentJumps;
+    // Triple Jump variables
+    private int maxJumps = 3;  // Max number of jumps
+    private int currentJumps;  // Current number of available jumps
 
     private void Start()
     {
@@ -42,6 +43,7 @@ public class PlayerShmove : MonoBehaviour
         HorizontalInput = Input.GetAxisRaw("Horizontal");
         VerticalInput = Input.GetAxisRaw("Vertical");
 
+        // Jumping logic
         if (Input.GetButtonDown("Jump") && currentJumps > 0)
         {
             Jump();
@@ -60,7 +62,8 @@ public class PlayerShmove : MonoBehaviour
     {
         MoveDirection = orientation.forward * VerticalInput + orientation.right * HorizontalInput;
 
-        rb.AddForce(MoveDirection.normalized * MoveSpeed * 10f, ForceMode.Force);
+        // Reduce force to slow acceleration
+        rb.AddForce(MoveDirection.normalized * MoveSpeed * 5f, ForceMode.Force);
     }
 
     private void StopPlayer()
@@ -88,20 +91,29 @@ public class PlayerShmove : MonoBehaviour
 
     private void Jump()
     {
-        rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z); 
+        rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);  // Reset y velocity to prevent stacking jumps
 
-        rb.AddForce(Vector3.up * 10f, ForceMode.Impulse); 
-        currentJumps--;
+        rb.AddForce(Vector3.up * 10f, ForceMode.Impulse);  // Add jump force
+        currentJumps--;  // Decrement the available jumps
     }
 
+    private void OnCollisionEnter(Collision other)
+    {
+        // Check if the player is grounded and only reset jump counter when they land if you want to
+        if (other.gameObject.CompareTag("Ground"))
+        {
+            // Do nothing, don't reset jumps
+        }
+    }
 
+    // Method to be called when the player picks up an item (e.g., triple jump power-up)
     public void AddJumps(int extraJumps)
     {
-        currentJumps = Mathf.Min(currentJumps + extraJumps, maxJumps);
+        currentJumps = Mathf.Min(currentJumps + extraJumps, maxJumps);  // Add jumps but cap at maxJumps
     }
 
     public int GetCurrentJumps()
     {
-        return currentJumps;
+        return currentJumps;  // This returns the current jump count
     }
 }

@@ -68,13 +68,38 @@ public class TeleportEndLevel : MonoBehaviour
         {
             cameraController.enabled = false;
         }
+
+        // Enable mouse cursor for UI interaction
+        Cursor.lockState = CursorLockMode.None;  // Unlock the cursor
+        Cursor.visible = true;  // Make the cursor visible
+
+        // Ensure buttons are interactable
+        nextLevelButton.interactable = true;
+        mainMenuButton.interactable = true;
     }
 
     private void GoToNextLevel()
     {
-        // Load the next scene (make sure to set the correct next scene name in the Inspector)
-        string nextSceneName = "NextLevel"; // Replace with the actual scene name
-        SceneManager.LoadScene(nextSceneName);
+        // Hide and lock the cursor before transitioning
+        Cursor.lockState = CursorLockMode.Locked;  // Lock the cursor back to the center
+        Cursor.visible = false;  // Hide the cursor
+
+        // Get the current scene
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+
+        // Load the next scene by its build index
+        int nextSceneIndex = currentSceneIndex + 1; // The next scene's build index
+
+        // Ensure that the next scene index is valid (i.e., the scene exists in the build settings)
+        if (nextSceneIndex < SceneManager.sceneCountInBuildSettings)
+        {
+            SceneManager.LoadScene(nextSceneIndex);  // Load the next scene
+        }
+        else
+        {
+            Debug.LogWarning("There are no more scenes to load in the build settings!");
+            // Optionally, load a main menu or show a message if no next scene is available
+        }
     }
 
     private void GoToMainMenu()

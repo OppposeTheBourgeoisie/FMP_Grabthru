@@ -21,7 +21,7 @@ public class TimedDoor : MonoBehaviour
         openPosition = closedPosition + openOffset;
 
         // Find and assign the TextMeshPro component attached to the door
-        doorText = GetComponentInChildren<TextMeshPro>();
+        doorText = GetComponentInChildren<TextMeshPro>(); 
 
         // Initialize the text to be empty initially
         if (doorText != null)
