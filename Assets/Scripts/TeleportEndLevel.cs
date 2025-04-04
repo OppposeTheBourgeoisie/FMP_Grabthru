@@ -71,7 +71,7 @@ public class TeleportEndLevel : MonoBehaviour
         MainMenuButton.interactable = true;
     }
 
-    private void GoToNextLevel()
+    public void GoToNextLevel()
     {
         //Hide the cursor and menu UI
         Cursor.lockState = CursorLockMode.Locked; 
@@ -92,7 +92,7 @@ public class TeleportEndLevel : MonoBehaviour
         }
     }
 
-    private void GoToMainMenu()
+    public void GoToMainMenu()
     {
         SceneManager.LoadScene("MainMenu");
     }

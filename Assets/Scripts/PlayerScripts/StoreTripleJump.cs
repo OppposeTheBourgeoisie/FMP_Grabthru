@@ -38,7 +38,7 @@ public class StoreTripleJump : MonoBehaviour
 
     void PerformJump()
     {
-        // Check if the player is grounded or has stored jumps available
+        //Check if the player is grounded or has stored jumps available
         if (IsGrounded || StoredJumps > 0)
         {
             Rb.velocity = new Vector3(Rb.velocity.x, 0, Rb.velocity.z);

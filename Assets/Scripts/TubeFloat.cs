@@ -8,6 +8,8 @@ public class TubeFloat : MonoBehaviour
 
     public Rigidbody PlayerRigidBody;
 
+    public PlayerShmove playerShmove;
+
     private void OnTriggerEnter(Collider other)
     {
         //When the player enters the trigger, disable gravity 
@@ -17,6 +19,8 @@ public class TubeFloat : MonoBehaviour
 
             Rb.useGravity = false;
             Rb.velocity = Vector3.up * LiftSpeed;
+            //Disable player movement
+            playerShmove.enabled = false;
         }
     }
 
@@ -44,6 +48,8 @@ public class TubeFloat : MonoBehaviour
             PlayerRigidBody.velocity = Vector3.zero;
             PlayerRigidBody.angularVelocity = Vector3.zero;
             PlayerRigidBody.AddForce(ExitPoint.forward * LaunchForce, ForceMode.Impulse);
+            //Enable player movement
+            playerShmove.enabled = true;
         }
     }
 }

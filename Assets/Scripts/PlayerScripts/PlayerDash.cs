@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class PlayerDash : MonoBehaviour
 {
+    //Dash variables
     public float DashSpeed = 15f;
     public float DashDuration = 0.3f;
     public float DashCooldown = 3f;

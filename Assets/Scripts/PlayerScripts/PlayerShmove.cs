@@ -45,7 +45,7 @@ public class PlayerShmove : MonoBehaviour
         HorizontalInput = Input.GetAxisRaw("Horizontal");
         VerticalInput = Input.GetAxisRaw("Vertical");
 
-        // Jumping logic
+        //Jumping logic
         if (Input.GetButtonDown("Jump") && CurrentJumps > 0)
         {
             Jump();
@@ -81,7 +81,6 @@ public class PlayerShmove : MonoBehaviour
             currentVelocity.x = Mathf.MoveTowards(currentVelocity.x, 0, Deceleration * Time.fixedDeltaTime);
             currentVelocity.z = Mathf.MoveTowards(currentVelocity.z, 0, Deceleration * Time.fixedDeltaTime);
         }
-
         else if (inputDot < 0)
         {
             float currentDeceleration = Deceleration * 1.5f;
@@ -94,6 +93,7 @@ public class PlayerShmove : MonoBehaviour
 
     private void ApplyCustomGravity()
     {
+        //Apply custom gravity so the player falls more naturally
         if (Rb.velocity.y < 0)
         {
             Rb.AddForce(Vector3.down * (Mathf.Abs(Physics.gravity.y) * (FallMultiplier - 1)), ForceMode.Acceleration);
@@ -121,6 +121,7 @@ public class PlayerShmove : MonoBehaviour
 
     public int GetCurrentJumps()
     {
+        //Update jumps the player has left
         return CurrentJumps;
     }
 }
