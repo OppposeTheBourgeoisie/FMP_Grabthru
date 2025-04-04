@@ -7,22 +7,23 @@ public class MusicSelector : MonoBehaviour
 
     void Start()
     {
-        // Load last selected song
+        //Load last selected song
         int savedSong = PlayerPrefs.GetInt("SelectedSong", 0);
-        dropdown.value = savedSong; // Set dropdown to match last choice
+        dropdown.value = savedSong;
 
-        // Listen for dropdown changes
+        //Change the song picked in the dropdown changes
         dropdown.onValueChanged.AddListener(delegate { OnSongSelected(dropdown.value); });
     }
 
     void OnSongSelected(int index)
     {
+        //Save the selected song
         PlayerPrefs.SetInt("SelectedSong", index);
-        PlayerPrefs.Save(); // Ensure it's saved
+        PlayerPrefs.Save();
 
         if (AudioManager.Instance != null)
         {
-            AudioManager.Instance.PlayMusic(index); // Play selected song immediately
+            AudioManager.Instance.PlayMusic(index);
         }
     }
 }

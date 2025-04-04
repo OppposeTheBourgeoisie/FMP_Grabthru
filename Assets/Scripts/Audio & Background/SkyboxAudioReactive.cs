@@ -3,13 +3,13 @@ using System.Collections;
 
 public class SkyboxAudioReactive : MonoBehaviour
 {
-    private AudioSource musicSource;
-    public Material skyboxMaterial; // Assign the Skybox Material
-    public Color lowVolumeColor = new Color(0.2f, 0.0f, 0.5f); // Darker tone
-    public Color highVolumeColor = new Color(1.0f, 0.5f, 1.0f); // Brighter reactive tone
-    public float sensitivity = 2f; // Lowered for smoother transitions
+    private AudioSource MusicSource;
+    public Material SkyboxMaterial;
+    public Color LowVolumeColor = new Color(0.2f, 0.0f, 0.5f);
+    public Color HighVolumeColor = new Color(1.0f, 0.5f, 1.0f);
+    public float Sensitivity = 2f;
 
-    private float[] spectrumData = new float[64]; // Holds spectrum analysis
+    private float[] SpectrumData = new float[64]; // Holds spectrum analysis
 
     void Start()
     {
@@ -18,13 +18,13 @@ public class SkyboxAudioReactive : MonoBehaviour
 
     IEnumerator FindAudioManager()
     {
-        while (musicSource == null)
+        while (MusicSource == null)
         {
-            AudioManager manager = FindObjectOfType<AudioManager>();
-            if (manager != null) 
-                musicSource = manager.GetComponent<AudioSource>();
+            AudioManager Manager = FindObjectOfType<AudioManager>();
+            if (Manager != null) 
+                MusicSource = Manager.GetComponent<AudioSource>();
 
-            if (musicSource == null)
+            if (MusicSource == null)
             {
                 yield return new WaitForSeconds(0.5f); // Retry every 0.5 seconds
             }
@@ -33,7 +33,7 @@ public class SkyboxAudioReactive : MonoBehaviour
 
     void Update()
     {
-        if (musicSource == null || !musicSource.isPlaying) return;
+        if (MusicSource == null || !MusicSource.isPlaying) return;
 
         AnalyzeAudio();
         UpdateSkybox();
@@ -41,23 +41,23 @@ public class SkyboxAudioReactive : MonoBehaviour
 
     void AnalyzeAudio()
     {
-        AudioListener.GetSpectrumData(spectrumData, 0, FFTWindow.Blackman);
+        AudioListener.GetSpectrumData(SpectrumData, 0, FFTWindow.Blackman);
 
-        float sum = 0;
-        for (int i = 0; i < spectrumData.Length; i++)
-            sum += spectrumData[i];
+        float Sum = 0;
+        for (int i = 0; i < SpectrumData.Length; i++)
+            Sum += SpectrumData[i];
 
-        float volumeLevel = sum * sensitivity;
-        volumeLevel = Mathf.Clamp01(volumeLevel); // Ensure it's between 0 and 1
+        float VolumeLevel = Sum * Sensitivity;
+        VolumeLevel = Mathf.Clamp01(VolumeLevel); // Ensure it's between 0 and 1
 
         // Apply smooth reactive gradient only to the lower sky
-        Color reactiveColor = Color.Lerp(lowVolumeColor, highVolumeColor, volumeLevel);
-        skyboxMaterial.SetColor("_GradientColor", reactiveColor);
+        Color ReactiveColor = Color.Lerp(LowVolumeColor, HighVolumeColor, VolumeLevel);
+        SkyboxMaterial.SetColor("_GradientColor", ReactiveColor);
     }
 
     void UpdateSkybox()
     {
-        RenderSettings.skybox = skyboxMaterial;
-        skyboxMaterial.SetColor("_GradientColor", skyboxMaterial.GetColor("_GradientColor")); // Force Unity to recognize the change
+        RenderSettings.skybox = SkyboxMaterial;
+        SkyboxMaterial.SetColor("_GradientColor", SkyboxMaterial.GetColor("_GradientColor")); // Force Unity to recognize the change
     }
 }

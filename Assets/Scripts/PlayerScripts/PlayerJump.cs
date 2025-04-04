@@ -4,33 +4,34 @@ using UnityEngine;
 
 public class PlayerJump : MonoBehaviour
 {
-    private Vector3 jump;
-    public float jumpForce = 2.0f;
+    private Vector3 Jump;
+    public float JumpForce = 2.0f;
 
-    private bool isGrounded;
-    Rigidbody rb;
+    private bool IsGrounded;
+    Rigidbody Rb;
 
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
-        jump = new Vector3(0.0f, 2.0f, 0.0f);
+        Rb = GetComponent<Rigidbody>();
+        Jump = new Vector3(0.0f, 2.0f, 0.0f);
     }
 
     void OnCollisionStay()
     {
-        isGrounded = true;
+        IsGrounded = true;
     }
 
-    private void OnCollisionExit(Collision collision)
+    private void OnCollisionExit(Collision Collision)
     {
-        isGrounded = false;
+        IsGrounded = false;
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        //Jump when the space key is pressed and the player is grounded
+        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded)
         {
-            rb.AddForce(jump * jumpForce, ForceMode.Impulse);
+            Rb.AddForce(Jump * JumpForce, ForceMode.Impulse);
         }
     }
 }

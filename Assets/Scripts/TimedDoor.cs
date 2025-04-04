@@ -1,40 +1,39 @@
 using UnityEngine;
-using TMPro;  // Make sure you have TextMeshPro package
+using TMPro;
 
 public class TimedDoor : MonoBehaviour
 {
-    public float openTime = 3f; // Time door stays open
-    public Vector3 openOffset = new Vector3(0, 5, 0); // How far the door moves when opened
-    private Vector3 closedPosition;
-    private Vector3 openPosition;
-    private bool isOpening = false;
+    public float OpenTime = 3f;
+    public Vector3 OpenOffset = new Vector3(0, 5, 0);
+    private Vector3 ClosedPosition;
+    private Vector3 OpenPosition;
+    private bool IsOpening = false;
 
-    public ItemPickup itemPickup;
+    public ItemPickup ItemPickup;
 
-    // Reference to TextMeshPro attached to the door
-    private TextMeshPro doorText;
-    private float timeRemaining;
+    private TextMeshPro DoorText;
+    private float TimeRemaining;
 
     void Start()
     {
-        closedPosition = transform.position;
-        openPosition = closedPosition + openOffset;
+        ClosedPosition = transform.position;
+        OpenPosition = ClosedPosition + OpenOffset;
 
-        // Find and assign the TextMeshPro component attached to the door
-        doorText = GetComponentInChildren<TextMeshPro>(); 
+        DoorText = GetComponentInChildren<TextMeshPro>(); 
 
-        // Initialize the text to be empty initially
-        if (doorText != null)
+        if (DoorText != null)
         {
-            doorText.text = "";
+            // While the door is closed, hide the text
+            DoorText.text = "";
         }
     }
 
     public void OpenDoor()
     {
-        if (!isOpening)
+        // Open the door and start the countdown
+        if (!IsOpening)
         {
-            isOpening = true;
+            IsOpening = true;
             StopAllCoroutines();
             StartCoroutine(OpenAndClose());
         }
@@ -42,50 +41,48 @@ public class TimedDoor : MonoBehaviour
 
     private System.Collections.IEnumerator OpenAndClose()
     {
-        // Start opening the door
-        float time = 0;
-        while (time < 0.5f)
+        // Open the door
+        float elapsedTime = 0;
+        while (elapsedTime < 0.5f)
         {
-            transform.position = Vector3.Lerp(closedPosition, openPosition, time / 0.5f);
-            time += Time.deltaTime;
+            transform.position = Vector3.Lerp(ClosedPosition, OpenPosition, elapsedTime / 0.5f);
+            elapsedTime += Time.deltaTime;
             yield return null;
         }
-        transform.position = openPosition;
+        transform.position = OpenPosition;
 
         // Show the remaining time text and set the countdown
-        if (doorText != null)
+        if (DoorText != null)
         {
-            timeRemaining = openTime;
-            doorText.text = Mathf.Ceil(timeRemaining).ToString() + "s";  // Show initial time remaining
+            TimeRemaining = OpenTime;
+            DoorText.text = Mathf.Ceil(TimeRemaining).ToString() + "s";
         }
 
-        // Countdown while the door is open
-        while (timeRemaining > 0f)
+        // When the time runs out, close the door
+        while (TimeRemaining > 0f)
         {
-            timeRemaining -= Time.deltaTime;
-            doorText.text = Mathf.Ceil(timeRemaining).ToString() + "s";  // Update text with remaining time
+            TimeRemaining -= Time.deltaTime;
+            DoorText.text = Mathf.Ceil(TimeRemaining).ToString() + "s";
             yield return null;
         }
 
-        // Hide the text once the door closes
-        if (doorText != null)
+        if (DoorText != null)
         {
-            doorText.text = "";
+            DoorText.text = "";
         }
 
-        // Wait before closing the door
         yield return new WaitForSeconds(0.5f);
 
         // Start closing the door
-        time = 0;
-        while (time < 0.5f)
+        elapsedTime = 0;
+        while (elapsedTime < 0.5f)
         {
-            transform.position = Vector3.Lerp(openPosition, closedPosition, time / 0.5f);
-            time += Time.deltaTime;
+            transform.position = Vector3.Lerp(OpenPosition, ClosedPosition, elapsedTime / 0.5f);
+            elapsedTime += Time.deltaTime;
             yield return null;
         }
-        transform.position = closedPosition;
+        transform.position = ClosedPosition;
 
-        isOpening = false;
+        IsOpening = false;
     }
 }

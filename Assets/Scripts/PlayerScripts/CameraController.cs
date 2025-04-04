@@ -4,47 +4,43 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField] private Transform target;  // Reference to the player's transform
-    [SerializeField] private float XSens = 10f;  // Mouse X sensitivity
-    [SerializeField] private float YSens = 10f;  // Mouse Y sensitivity
+    [SerializeField] private Transform target;
+    [SerializeField] private float XSens = 10f;
+    [SerializeField] private float YSens = 10f;
 
-    private Vector3 offset; // Offset between the camera and player
-    private float XRotation = 0f;  // Rotation on X-axis (up/down, pitch)
-    private float YRotation = 0f;  // Rotation on Y-axis (left/right, yaw)
+    private Vector3 offset;
+    private float XRotation = 0f;
+    private float YRotation = 0f;
 
     private void Start()
     {
-        // Calculate the initial offset between the camera and player (at head level)
+        //Set the camera to the player's head position
         offset = transform.position - target.position;
 
-        // Lock the cursor in the middle of the screen and hide it for first-person control
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
     private void Update()
     {
-        // Get mouse input for rotation
+        //Update according to mouse movement
         float mouseX = Input.GetAxisRaw("Mouse X") * XSens * Time.deltaTime;
         float mouseY = Input.GetAxisRaw("Mouse Y") * YSens * Time.deltaTime;
 
-        // Update Y-axis rotation (for horizontal camera movement)
         YRotation += mouseX;
 
-        // Update X-axis rotation (for vertical camera movement)
         XRotation -= mouseY;
-        XRotation = Mathf.Clamp(XRotation, -90f, 90f);  // Prevent flipping upside down
+        XRotation = Mathf.Clamp(XRotation, -90f, 90f);
 
-        // Apply rotation to the camera
         transform.rotation = Quaternion.Euler(XRotation, YRotation, 0f);
 
-        // Update player body rotation (yaw) to follow camera's horizontal movement
+        //Update player rotation to match camera Y rotation
         target.rotation = Quaternion.Euler(0f, YRotation, 0f);
     }
 
     private void LateUpdate()
     {
-        // Keep the camera at the fixed offset from the player (at head level)
+        // Keep the camera at the fixed offset from the player
         transform.position = target.position + offset;
     }
 }
