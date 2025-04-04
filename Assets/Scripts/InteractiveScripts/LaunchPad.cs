@@ -4,24 +4,28 @@ using UnityEngine;
 
 public class LaunchPad : MonoBehaviour
 {
-    public Rigidbody playerRigidbody;
-    public Transform cannonMouth;
-    public float launchForce = 1000f;
+    public Rigidbody PlayerRigidbody;
+    public Transform CannonMouth;
+    public float LaunchForce = 1000f;
+    [Range(0f, 1f)] public float UpwardModifier = 0.3f;
 
-
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider Other)
     {
         LaunchPlayer();
     }
 
     void LaunchPlayer()
     {
-        if (playerRigidbody != null && cannonMouth != null)
+        if (PlayerRigidbody != null && CannonMouth != null)
         {
-            playerRigidbody.velocity = Vector3.zero;
-            playerRigidbody.angularVelocity = Vector3.zero;
-            playerRigidbody.transform.position = cannonMouth.position;
-            playerRigidbody.AddForce(cannonMouth.forward * launchForce, ForceMode.Impulse);
+            // Reset the player's velocity and position and then apply the launch force
+            PlayerRigidbody.velocity = Vector3.zero;
+            PlayerRigidbody.angularVelocity = Vector3.zero;
+            PlayerRigidbody.transform.position = CannonMouth.position;
+
+            Vector3 LaunchDirection = (CannonMouth.forward + Vector3.up * UpwardModifier).normalized;
+
+            PlayerRigidbody.AddForce(LaunchDirection * LaunchForce, ForceMode.Impulse);
         }
     }
 }

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.09301135, g: 0.017796157, b: 0.11867917, a: 1}
+  m_IndirectSpecularColor: {r: 0.18566999, g: 0.039738905, b: 0.18490416, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -153,8 +153,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   musicTracks:
-  - {fileID: 8300000, guid: 5bbf8915c7245da4aac68077832de963, type: 3}
-  - {fileID: 8300000, guid: de7183c143f24064c805a802cc776a32, type: 3}
+  - {fileID: 8300000, guid: 3536a4c801ad9e149a48b2909670375c, type: 3}
+  - {fileID: 8300000, guid: af47e9de1953fd545aab0041d265bd05, type: 3}
 --- !u!4 &20658037
 Transform:
   m_ObjectHideFlags: 0
@@ -1040,9 +1040,9 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
-    - m_Text: Indigo
+    - m_Text: Smell of the Game
       m_Image: {fileID: 0}
-    - m_Text: Lofi Background
+    - m_Text: Love the Subhuman Self
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1675,7 +1675,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Indigo
+  m_text: Smell of the Game
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

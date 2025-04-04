@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class PressurePadInteract : MonoBehaviour
 {
-    public Rigidbody playerRigidBody;
+    public Rigidbody PlayerRigidBody;
 
-    public TimedDoor timedDoor;
+    public TimedDoor TimedDoor;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -15,6 +15,7 @@ public class PressurePadInteract : MonoBehaviour
 
     void SteppedOn()
     {
-        timedDoor.OpenDoor();
+        //When stepped on, the door open event will trigger
+        TimedDoor.OpenDoor();
     }
 }

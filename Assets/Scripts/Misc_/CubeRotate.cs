@@ -4,19 +4,21 @@ using UnityEngine;
 
 public class CubeRotate : MonoBehaviour
 {
-    float xSpin;
-    float ySpin;
-    float zSpin;
+    float XSpin;
+    float YSpin;
+    float ZSpin;
 
     private void Start()
     {
-        xSpin = Random.Range(5f, 30f);
-        ySpin = Random.Range(5f, 30f);
-        zSpin = Random.Range(5f, 30f);
+        //Initialize the spin values
+        XSpin = Random.Range(5f, 30f);
+        YSpin = Random.Range(5f, 30f);
+        ZSpin = Random.Range(5f, 30f);
     }
 
     private void Update()
     {
-        transform.Rotate(xSpin * Time.deltaTime, ySpin * Time.deltaTime, zSpin * Time.deltaTime);
+        //Rotate the cube randomly according to the spin values
+        transform.Rotate(XSpin * Time.deltaTime, YSpin * Time.deltaTime, ZSpin * Time.deltaTime);
     }
 }

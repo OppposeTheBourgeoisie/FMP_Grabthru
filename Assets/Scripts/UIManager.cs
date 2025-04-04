@@ -1,35 +1,33 @@
 using UnityEngine;
-using UnityEngine.UI;  // If using standard Text
-using TMPro;  // Uncomment if using TextMeshPro
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-    public TextMeshProUGUI jumpCountText;  // Uncomment if using TextMeshPro
+    public TextMeshProUGUI JumpCountText; 
 
-    public PlayerShmove playerShmove;
+    public PlayerShmove PlayerShmove;
 
     private void Start()
     {
-        // Find the PlayerShmove script in the scene (if not assigned in the Inspector)
-        playerShmove = FindObjectOfType<PlayerShmove>();
+        PlayerShmove = FindObjectOfType<PlayerShmove>();
     }
 
     private void Update()
     {
-        // Update the jump count UI
-        if (playerShmove != null)
+        if (PlayerShmove != null)
         {
-            int currentJumps = playerShmove.GetCurrentJumps();
+            int CurrentJumps = PlayerShmove.GetCurrentJumps();
             
-            // If jumps are 0, hide the text
-            if (currentJumps == 0)
+            // Hide the text if the player has no jumps left
+            if (CurrentJumps == 0)
             {
-                jumpCountText.gameObject.SetActive(false);  // Hide the text object
+                JumpCountText.gameObject.SetActive(false);
             }
             else
             {
-                jumpCountText.gameObject.SetActive(true);   // Show the text object
-                jumpCountText.text = "Jumps: " + currentJumps.ToString();  // Update the text
+                // Show the current jumps
+                JumpCountText.gameObject.SetActive(true);
+                JumpCountText.text = "Jumps: " + CurrentJumps.ToString();
             }
         }
     }

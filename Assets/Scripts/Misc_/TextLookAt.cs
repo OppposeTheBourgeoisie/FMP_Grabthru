@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class TextLookAt : MonoBehaviour
 {
-    public Transform target;
+    public Transform Target;
 
     void Update()
     {
-        transform.LookAt(target);
+        //Make the text look at the target
+        transform.LookAt(Target);
     }
 }
