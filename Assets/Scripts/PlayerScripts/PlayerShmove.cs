@@ -35,8 +35,19 @@ public class PlayerShmove : MonoBehaviour
     {
         MyInput();
         StopPlayer();
+
         //Movement speed clamp
-        Rb.velocity = new Vector3(Mathf.Clamp(Rb.velocity.x, -MaxSpeed, MaxSpeed), Rb.velocity.y, Mathf.Clamp(Rb.velocity.z, -MaxSpeed, MaxSpeed));
+        Vector3 velocity = Rb.velocity;
+
+        float maxStrafeSpeed = MaxSpeed; // or use separate values if you want
+        float maxForwardSpeed = MaxSpeed;
+
+        Vector3 localVel = transform.InverseTransformDirection(velocity);
+        localVel.x = Mathf.Clamp(localVel.x, -maxStrafeSpeed, maxStrafeSpeed);
+        localVel.z = Mathf.Clamp(localVel.z, -maxForwardSpeed, maxForwardSpeed);
+
+        Rb.velocity = transform.TransformDirection(localVel);
+        Rb.velocity = new Vector3(Rb.velocity.x, velocity.y, Rb.velocity.z); // retain vertical velocity
     }
 
     private void MyInput()
@@ -66,7 +77,9 @@ public class PlayerShmove : MonoBehaviour
         //Calculate movement
         MoveDirection = Orientation.forward * VerticalInput + Orientation.right * HorizontalInput;
 
-        Rb.AddForce(MoveDirection.normalized * MoveSpeed * 5f, ForceMode.Force);
+        // Apply directional acceleration without normalizing
+        Vector3 movementForce = MoveDirection * MoveSpeed * 5f;
+        Rb.AddForce(movementForce, ForceMode.Acceleration);
     }
 
     private void StopPlayer()

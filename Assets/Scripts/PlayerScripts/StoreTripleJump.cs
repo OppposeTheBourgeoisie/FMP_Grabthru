@@ -2,27 +2,27 @@ using UnityEngine;
 
 public class StoreTripleJump : MonoBehaviour
 {
-    public float JumpForce = 10f;
-    public int MaxStoredJumps = 3;
-    public float GroundCheckDistance = 0.2f;
-    public LayerMask GroundLayer;
+    public float jumpForce = 10f; // Force of each jump
+    public int maxStoredJumps = 3; // Maximum stored jumps
+    public float groundCheckDistance = 0.2f; // Distance for ground detection
+    public LayerMask groundLayer; // Set this to "Ground" layer in Inspector
 
-    private Rigidbody Rb;
-    private int StoredJumps = 0;
-    private bool IsGrounded;
+    private Rigidbody rb;
+    private int storedJumps = 0;
+    private bool isGrounded;
 
     void Start()
     {
-        Rb = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
     }
 
     void Update()
     {
         CheckGround();
 
-        if (IsGrounded)
+        if (isGrounded)
         {
-            StoredJumps = MaxStoredJumps;
+            storedJumps = maxStoredJumps; // Reset stored jumps when landing
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -33,20 +33,19 @@ public class StoreTripleJump : MonoBehaviour
 
     void CheckGround()
     {
-        IsGrounded = Physics.Raycast(transform.position, Vector3.down, GroundCheckDistance, GroundLayer);
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
     }
 
     void PerformJump()
     {
-        //Check if the player is grounded or has stored jumps available
-        if (IsGrounded || StoredJumps > 0)
+        if (isGrounded || storedJumps > 0)
         {
-            Rb.velocity = new Vector3(Rb.velocity.x, 0, Rb.velocity.z);
-            Rb.AddForce(Vector3.up * JumpForce, ForceMode.Impulse);
+            rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z); // Reset vertical velocity
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
 
-            if (!IsGrounded)
+            if (!isGrounded)
             {
-                StoredJumps--;
+                storedJumps--; // Consume a stored jump
             }
         }
     }
