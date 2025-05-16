@@ -1,19 +1,35 @@
 ﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.UI; // Make sure this is included for UI Image
-using TMPro; // If using TextMeshPro for countdown text
+using UnityEngine.UI;
+using TMPro;
+using UnityEngine.InputSystem; // Add this for the new Input System
 
 public class PlayerDash : MonoBehaviour
 {
     public float DashSpeed;
     public float DashCooldown = 3f;
-    
+
     private Rigidbody rb;
     private bool isDashing;
     private bool canDash = true;
     private float cooldownTimer;
 
-    public Image dashCooldownBar; // Reference to the Image (your circle)
+    public Image dashCooldownBar;
+
+    private PlayerInputActions inputActions;
+    private Vector2 moveInput;
+    private bool dashPressed;
+
+    private void Awake()
+    {
+        inputActions = new PlayerInputActions();
+        inputActions.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
+        inputActions.Player.Move.canceled += ctx => moveInput = Vector2.zero;
+        inputActions.Player.Dash.performed += ctx => dashPressed = true; // You need to add a "Dash" action in your input actions
+    }
+
+    private void OnEnable() => inputActions.Enable();
+    private void OnDisable() => inputActions.Disable();
 
     private void Start()
     {
@@ -23,20 +39,21 @@ public class PlayerDash : MonoBehaviour
 
     private void Update()
     {
-        // Dash input (mouse button 1 in this case)
-        if (Input.GetMouseButtonDown(1) && canDash)
+        // Dash input (using new input system)
+        if (dashPressed && canDash)
         {
             isDashing = true;
             canDash = false;
             cooldownTimer = DashCooldown;
             StartCoroutine(DashCooldownRoutine());
         }
+        dashPressed = false; // Reset flag
 
         // Update UI Cooldown
         if (!canDash)
         {
             cooldownTimer -= Time.deltaTime;
-            dashCooldownBar.fillAmount = 1 - (cooldownTimer / DashCooldown); // Update circle fill
+            dashCooldownBar.fillAmount = 1 - (cooldownTimer / DashCooldown);
         }
     }
 
@@ -48,14 +65,11 @@ public class PlayerDash : MonoBehaviour
 
     private void Dashing()
     {
-        float horizontalInput = Input.GetAxisRaw("Horizontal");
-        float verticalInput = Input.GetAxisRaw("Vertical");
-
-        Vector3 inputDirection = new Vector3(horizontalInput, 0, verticalInput).normalized;
+        Vector3 inputDirection = new Vector3(moveInput.x, 0, moveInput.y).normalized;
 
         if (inputDirection.magnitude > 0)
         {
-            Vector3 dashDirection = (transform.forward * verticalInput + transform.right * horizontalInput).normalized;
+            Vector3 dashDirection = (transform.forward * moveInput.y + transform.right * moveInput.x).normalized;
             rb.AddForce(dashDirection * DashSpeed, ForceMode.Impulse);
         }
 
@@ -64,8 +78,8 @@ public class PlayerDash : MonoBehaviour
 
     private IEnumerator DashCooldownRoutine()
     {
-        yield return new WaitForSeconds(DashCooldown); // Wait until cooldown is over
+        yield return new WaitForSeconds(DashCooldown);
         canDash = true;
-        dashCooldownBar.fillAmount = 0; // Reset circle to empty
+        dashCooldownBar.fillAmount = 0;
     }
 }
