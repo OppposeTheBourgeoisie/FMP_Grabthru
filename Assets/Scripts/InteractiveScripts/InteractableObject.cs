@@ -7,14 +7,15 @@ public class InteractableObject : MonoBehaviour
     float InteractDist = 2f;
     bool Interacting = false;
 
+    // Start is called before the first frame update
     void Start()
     {
         Interacting = false;
     }
 
+    // Update is called once per frame
     private void Update()
     {
-        //Check if the player is pressing the interact key (E) and if the object is not already being interacted with
         if (Input.GetKeyDown(KeyCode.E))
         {
             Collider[] ColliderArray = Physics.OverlapSphere(transform.position, InteractDist);
@@ -40,7 +41,6 @@ public class InteractableObject : MonoBehaviour
 
     public ItemPickup GetInteractableObject()
     {
-        //Check what the player interacted with and return that object
         Collider[] ColliderArray = Physics.OverlapSphere(transform.position, InteractDist);
         foreach (Collider collider in ColliderArray)
         {

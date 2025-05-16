@@ -4,13 +4,12 @@ using UnityEngine;
 
 public class DeathPlane : MonoBehaviour
 {
-    public Transform RespawnPoint;
-    public string PlayerTag = "Player";
+    public Transform respawnPoint;
+    public string playerTag = "Player";
 
     private void OnTriggerEnter(Collider other)
     {
-        //Check if the player has entered the trigger
-        if (other.CompareTag(PlayerTag))
+        if (other.CompareTag(playerTag))
         {
             Respawn(other.gameObject);
         }
@@ -18,11 +17,10 @@ public class DeathPlane : MonoBehaviour
 
     void Respawn(GameObject player)
     {
-        //Respawn the player at the RespawnPoint
-        if (RespawnPoint != null)
+        if (respawnPoint != null)
         {
-            player.transform.position = RespawnPoint.position;
-            player.transform.rotation = RespawnPoint.rotation;
+            player.transform.position = respawnPoint.position;
+            player.transform.rotation = respawnPoint.rotation;
             Rigidbody rb = player.GetComponent<Rigidbody>();
             if (rb != null)
             {

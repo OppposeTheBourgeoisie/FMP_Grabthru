@@ -6,13 +6,13 @@ public class RopeSwing : MonoBehaviour
 {
     public KeyCode SwingKey = KeyCode.Mouse0;
 
-    public LineRenderer Lr;
-    public Transform GunTip, Cam, Player;
+    public LineRenderer lr;
+    public Transform GunTip, cam, player;
     public LayerMask WhatIsGrappleable;
 
-    private float MaxSwingDistance = 25f;
+    private float MaxSwingDistance = 50f;
     private Vector3 SwingPoint;
-    private SpringJoint Joint;
+    private SpringJoint joint;
     private Vector3 CurrentGrapplePosition;
 
     public RaycastHit PredictionHit;
@@ -29,62 +29,65 @@ public class RopeSwing : MonoBehaviour
         CheckForSwingPoints();
     }
 
-    void StartSwing()
+        void StartSwing()
     {
-        //If there is a valid swing point, start swinging
-        if (PredictionHit.point == Vector3.zero) return;
+        // Ensure we have a valid PredictionHit from either Raycast or SphereCast
+        if (PredictionHit.point == Vector3.zero) return;  // Prevent starting without a valid point
 
         RaycastHit hit;
 
-        if (Physics.Raycast(Cam.position, Cam.forward, out hit, MaxSwingDistance, WhatIsGrappleable))
+        // Try to use Raycast first
+        if (Physics.Raycast(cam.position, cam.forward, out hit, MaxSwingDistance, WhatIsGrappleable))
         {
             SwingPoint = hit.point;
         }
-        else if (Physics.SphereCast(Cam.position, PredictionSphereCastRadius, Cam.forward, out hit, MaxSwingDistance, WhatIsGrappleable))
+        // If Raycast didn't hit anything, use SphereCast
+        else if (Physics.SphereCast(cam.position, PredictionSphereCastRadius, cam.forward, out hit, MaxSwingDistance, WhatIsGrappleable))
         {
-            SwingPoint = hit.point;
+            SwingPoint = hit.point; // Use the SphereCast hit point
         }
         else
         {
-            return;
+            return; // If neither hits, do not start the swing
         }
 
-        //Create the spring joint for swinging
-        Joint = Player.gameObject.AddComponent<SpringJoint>();
-        Joint.autoConfigureConnectedAnchor = false;
-        Joint.connectedAnchor = SwingPoint;
+        // Create the spring joint for swinging
+        joint = player.gameObject.AddComponent<SpringJoint>();
+        joint.autoConfigureConnectedAnchor = false;
+        joint.connectedAnchor = SwingPoint;
 
-        float DistanceFromPoint = Vector3.Distance(Player.position, SwingPoint);
-        Joint.maxDistance = DistanceFromPoint * 0.8f;
-        Joint.minDistance = DistanceFromPoint * 0.25f;
+        float DistanceFromPoint = Vector3.Distance(player.position, SwingPoint);
+        joint.maxDistance = DistanceFromPoint * 0.8f;
+        joint.minDistance = DistanceFromPoint * 0.25f;
 
-        Joint.spring = 4.5f;
-        Joint.damper = 7f;
-        Joint.massScale = 4.5f;
+        joint.spring = 4.5f;
+        joint.damper = 7f;
+        joint.massScale = 4.5f;
 
-        //Use line renderer to visualize the rope
-        Lr.positionCount = 2;
+        // Set up the LineRenderer to draw the rope
+        lr.positionCount = 2;
         CurrentGrapplePosition = GunTip.position;
     }
 
     void StopSwing()
     {
-        //When the player stops swinging, remove the spring joint and line renderer
-        //Also release the player at the current velocity
-        Lr.positionCount = 0;
-        if (Joint != null)
+        lr.positionCount = 0;
+        if (joint != null)
         {
-            Vector3 releaseVelocity = Player.GetComponent<Rigidbody>().velocity;
+            // Capture current velocity before removing the joint
+            Vector3 releaseVelocity = player.GetComponent<Rigidbody>().velocity;
 
-            float maxReleaseSpeed = 20f;
+            // Limit the release speed to prevent excessive launching
+            float maxReleaseSpeed = 20f; // Adjust as needed
             if (releaseVelocity.magnitude > maxReleaseSpeed)
             {
                 releaseVelocity = releaseVelocity.normalized * maxReleaseSpeed;
             }
 
-            Player.GetComponent<Rigidbody>().velocity = releaseVelocity;
+            // Apply the limited velocity
+            player.GetComponent<Rigidbody>().velocity = releaseVelocity;
 
-            Destroy(Joint);
+            Destroy(joint);
         }
     }
 
@@ -95,52 +98,49 @@ public class RopeSwing : MonoBehaviour
 
     void DrawRope()
     {
-        if (Joint == null) return;
+        if (joint == null) return;
 
         CurrentGrapplePosition = Vector3.Lerp(CurrentGrapplePosition, SwingPoint, Time.deltaTime * 8f);
 
-        Lr.SetPosition(0, GunTip.position);
-        Lr.SetPosition(1, SwingPoint);
+        lr.SetPosition(0, GunTip.position);
+        lr.SetPosition(1, SwingPoint);
     }
 
     void CheckForSwingPoints()
     {
-        //Check if the player is swinging or if the prediction point is null
-        if (Joint != null || PredictionPoint == null) return;
+        if (joint != null || PredictionPoint == null) return; // Prevent errors
 
-        //Check if the player is able to grapple
+        // Temporarily disable PredictionPoint to prevent self-detection
         bool wasActive = PredictionPoint.gameObject.activeSelf;
         PredictionPoint.gameObject.SetActive(false);
 
-        //SphereCast to find the grapple point
         RaycastHit sphereCastHit;
-        bool sphereHit = Physics.SphereCast(Cam.position, PredictionSphereCastRadius, Cam.forward, out sphereCastHit, MaxSwingDistance, WhatIsGrappleable);
+        bool sphereHit = Physics.SphereCast(cam.position, PredictionSphereCastRadius, cam.forward, out sphereCastHit, MaxSwingDistance, WhatIsGrappleable);
 
-        //raycast to find the grapple point
         RaycastHit raycastHit;
-        bool rayHit = Physics.Raycast(Cam.position, Cam.forward, out raycastHit, MaxSwingDistance, WhatIsGrappleable);
+        bool rayHit = Physics.Raycast(cam.position, cam.forward, out raycastHit, MaxSwingDistance, WhatIsGrappleable);
 
         Vector3 newHitPoint = Vector3.zero;
 
-        //Raycast if available, otherwise use SphereCast
+        // Choose the best valid hit point (raycast first, spherecast second)
         if (rayHit)
             newHitPoint = raycastHit.point;
         else if (sphereHit)
             newHitPoint = sphereCastHit.point;
 
-        //Bring back prediction point
+        // Restore PredictionPoint visibility
         PredictionPoint.gameObject.SetActive(wasActive);
 
         if (newHitPoint != Vector3.zero)
         {
             PredictionPoint.gameObject.SetActive(true);
             PredictionPoint.position = newHitPoint;
-            PredictionHit = rayHit ? raycastHit : sphereCastHit;
+            PredictionHit = rayHit ? raycastHit : sphereCastHit; // Store correct hit data
         }
         else
         {
             PredictionPoint.gameObject.SetActive(false);
-            PredictionHit = new RaycastHit();
+            PredictionHit = new RaycastHit(); // Reset PredictionHit when nothing is found
         }
     }
 }

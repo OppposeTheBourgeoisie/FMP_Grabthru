@@ -1,99 +1,110 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
-using TMPro;
+using TMPro; // Import TextMeshPro namespace
 using UnityEngine.UI;
 
 public class TeleportEndLevel : MonoBehaviour
 {
-    public GameObject MenuUI;
-    public TMP_Text PerformanceText;
-    public Button NextLevelButton;
-    public Button MainMenuButton;
+    public GameObject menuUI; // Reference to the menu UI panel
+    public TMP_Text performanceText; // TextMeshPro reference for performance (e.g., time, score)
+    public Button nextLevelButton;
+    public Button mainMenuButton;
 
-    private bool IsTeleporting = false;
+    private bool isTeleporting = false;
 
-    private PlayerShmove PlayerMovement;
-    private CameraController CameraController;
+    private PlayerShmove playerMovement; // Reference to the player movement script
+    private CameraController cameraController; // Reference to the camera control script (if separate)
 
     private void Start()
     {
-        //Initialize the menu UI and buttons
-        MenuUI.SetActive(false);
+        // Hide the menu initially
+        menuUI.SetActive(false);
 
-        NextLevelButton.onClick.AddListener(GoToNextLevel);
-        MainMenuButton.onClick.AddListener(GoToMainMenu);
+        // Button event listeners
+        nextLevelButton.onClick.AddListener(GoToNextLevel);
+        mainMenuButton.onClick.AddListener(GoToMainMenu);
 
-        PlayerMovement = FindObjectOfType<PlayerShmove>();
-        CameraController = FindObjectOfType<CameraController>();
+        // Get references to the player movement and camera controller
+        playerMovement = FindObjectOfType<PlayerShmove>();
+        cameraController = FindObjectOfType<CameraController>(); // Assuming CameraController is the name of the camera control script
     }
 
-    private void OnTriggerEnter(Collider Other)
+    private void OnTriggerEnter(Collider other)
     {
-        if (Other.CompareTag("Player") && !IsTeleporting)
+        if (other.CompareTag("Player") && !isTeleporting)
         {
-            IsTeleporting = true;
-            Timer.Instance.StopTimer();
-            DisplayMenu(Other);
+            isTeleporting = true;
+            Timer.Instance.StopTimer(); // Stop and hide the timer immediately when the player collides with the object
+            DisplayMenu(other); // Pass the collider to the DisplayMenu method
         }
     }
 
-    private void DisplayMenu(Collider Player)
+    private void DisplayMenu(Collider player)
     {
         // Get the final time from the Timer script
-        float FinalTime = Timer.Instance.GetElapsedTime();
+        float finalTime = Timer.Instance.GetElapsedTime();
         
-        int Minutes = Mathf.FloorToInt(FinalTime / 60);
-        int Seconds = Mathf.FloorToInt(FinalTime % 60);
-        int Milliseconds = Mathf.FloorToInt((FinalTime * 100) % 100);
+        // Format the time into minutes, seconds, and milliseconds
+        int minutes = Mathf.FloorToInt(finalTime / 60);
+        int seconds = Mathf.FloorToInt(finalTime % 60);
+        int milliseconds = Mathf.FloorToInt((finalTime * 100) % 100);
 
-        string Performance = string.Format("Level Completed!\nTime: {0:00}:{1:00}:{2:00}", Minutes, Seconds, Milliseconds);
+        // Create the performance string with time
+        string performance = string.Format("Level Completed!\nTime: {0:00}:{1:00}:{2:00}", minutes, seconds, milliseconds);
 
-        PerformanceText.text = Performance;
+        // Display the performance text using TextMeshPro
+        performanceText.text = performance;
 
-        MenuUI.SetActive(true);
+        // Show the menu UI
+        menuUI.SetActive(true);
 
-        //Disable player movement and camera control
-        if (PlayerMovement != null)
+        // Disable player movement and camera control
+        if (playerMovement != null)
         {
-            PlayerMovement.enabled = false;
+            playerMovement.enabled = false;
         }
-        if (CameraController != null)
+        if (cameraController != null)
         {
-            CameraController.enabled = false;
+            cameraController.enabled = false;
         }
 
-        //Enable mouse cursor for UI interaction
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+        // Enable mouse cursor for UI interaction
+        Cursor.lockState = CursorLockMode.None;  // Unlock the cursor
+        Cursor.visible = true;  // Make the cursor visible
 
-        NextLevelButton.interactable = true;
-        MainMenuButton.interactable = true;
+        // Ensure buttons are interactable
+        nextLevelButton.interactable = true;
+        mainMenuButton.interactable = true;
     }
 
-    public void GoToNextLevel()
+    private void GoToNextLevel()
     {
-        //Hide the cursor and menu UI
-        Cursor.lockState = CursorLockMode.Locked; 
-        Cursor.visible = false;
+        // Hide and lock the cursor before transitioning
+        Cursor.lockState = CursorLockMode.Locked;  // Lock the cursor back to the center
+        Cursor.visible = false;  // Hide the cursor
 
-        int CurrentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        // Get the current scene
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
 
-        //Load the next scene in the build index
-        int NextSceneIndex = CurrentSceneIndex + 1;
+        // Load the next scene by its build index
+        int nextSceneIndex = currentSceneIndex + 1; // The next scene's build index
 
-        if (NextSceneIndex < SceneManager.sceneCountInBuildSettings)
+        // Ensure that the next scene index is valid (i.e., the scene exists in the build settings)
+        if (nextSceneIndex < SceneManager.sceneCountInBuildSettings)
         {
-            SceneManager.LoadScene(NextSceneIndex);
+            SceneManager.LoadScene(nextSceneIndex);  // Load the next scene
         }
         else
         {
-            GoToMainMenu();  // If no next level, go to main menu
+            Debug.LogWarning("There are no more scenes to load in the build settings!");
+            // Optionally, load a main menu or show a message if no next scene is available
         }
     }
 
-    public void GoToMainMenu()
+    private void GoToMainMenu()
     {
+        // Load the main menu scene (replace with your actual main menu scene name)
         SceneManager.LoadScene("MainMenu");
     }
 }

@@ -3,12 +3,11 @@ using UnityEngine.SceneManagement;
 
 public class NextScene : MonoBehaviour
 {
-    public GameObject UiCanvas;
+    public GameObject uiCanvas; // Assign your UI Canvas in Inspector
 
     public void LoadNextScene()
     {
-        //Load the next scene and destroy the UI canvas
-        Destroy(UiCanvas);
+        Destroy(uiCanvas); // Destroy UI before switching scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }

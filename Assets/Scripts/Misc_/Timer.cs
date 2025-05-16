@@ -3,15 +3,14 @@ using TMPro;
 
 public class Timer : MonoBehaviour
 {
-    public TextMeshProUGUI TimerText;
-    private float ElapsedTime = 0f;
-    private bool IsRunning = true;
+    public TextMeshProUGUI timerText;
+    private float elapsedTime = 0f;
+    private bool isRunning = true;
 
-    public static Timer Instance;
+    public static Timer Instance; // Singleton for easy access
 
     private void Awake()
     {
-        //Singleton pattern
         if (Instance == null)
         {
             Instance = this;
@@ -20,36 +19,34 @@ public class Timer : MonoBehaviour
 
     private void Update()
     {
-        if (IsRunning)
+        if (isRunning)
         {
-            ElapsedTime += Time.deltaTime;
+            elapsedTime += Time.deltaTime;
             UpdateTimerDisplay();
         }
     }
 
     private void UpdateTimerDisplay()
     {
-        //Format the timer
-        int Minutes = Mathf.FloorToInt(ElapsedTime / 60);
-        int Seconds = Mathf.FloorToInt(ElapsedTime % 60);
-        int Milliseconds = Mathf.FloorToInt((ElapsedTime * 100) % 100);
+        int minutes = Mathf.FloorToInt(elapsedTime / 60);
+        int seconds = Mathf.FloorToInt(elapsedTime % 60);
+        int milliseconds = Mathf.FloorToInt((elapsedTime * 100) % 100);
 
-        TimerText.text = string.Format("{0:00}:{1:00}:{2:00}", Minutes, Seconds, Milliseconds);
+        timerText.text = string.Format("{0:00}:{1:00}:{2:00}", minutes, seconds, milliseconds);
     }
 
     public void StopTimer()
     {
-        //Stop the timer when the level ends
-        IsRunning = false;
-        
-        if (TimerText != null)
+        isRunning = false;
+        // Hide the timer display when the level ends
+        if (timerText != null)
         {
-            TimerText.gameObject.SetActive(false);
+            timerText.gameObject.SetActive(false); // Hide the timer text
         }
     }
 
     public float GetElapsedTime()
     {
-        return ElapsedTime;
+        return elapsedTime;
     }
 }

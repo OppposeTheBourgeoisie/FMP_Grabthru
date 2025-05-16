@@ -7,20 +7,17 @@ public class SceneLoader : MonoBehaviour
 {
     public void StartGame()
     {
-        //Load the first level of the game
-        SceneManager.LoadScene("Level1");
+        SceneManager.LoadScene("Level1"); // Load the main menu scene
     }
 
     public void LoadControls()
     {
-        //Load the controls scene
-        SceneManager.LoadScene("ControlScene");
+        SceneManager.LoadScene("ControlScene"); // Load the controls scene
     }
 
     public void LoadMainMenu()
     {
-        //Load the main menu scene
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene("MainMenu"); // Load the main menu scene
     }
 
     public void QuitGame()
@@ -28,6 +25,7 @@ public class SceneLoader : MonoBehaviour
         // Quit the application
         Application.Quit();
 
+        // If running in the editor, stop playing the scene
         #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
         #endif

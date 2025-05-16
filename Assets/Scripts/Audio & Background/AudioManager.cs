@@ -11,14 +11,13 @@ public class AudioManager : MonoBehaviour
     {
         if (Instance == null)
         {
-            //Keep the music playing between scenes
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject); // Keep music playing across scenes
 
             audioSource = gameObject.AddComponent<AudioSource>();
-            audioSource.loop = true;
+            audioSource.loop = true; // Keep playing the song
 
-            //Play selected song immediately
+            // 🔹 Load and play selected song immediately
             int selectedSong = PlayerPrefs.GetInt("SelectedSong", 0);
             PlayMusic(selectedSong);
         }
@@ -30,7 +29,6 @@ public class AudioManager : MonoBehaviour
 
     public void PlayMusic(int trackIndex)
     {
-        //Play the selected music track
         if (trackIndex >= 0 && trackIndex < musicTracks.Length)
         {
             audioSource.clip = musicTracks[trackIndex];

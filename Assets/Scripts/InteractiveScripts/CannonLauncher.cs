@@ -1,17 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class LaunchPad : MonoBehaviour
+public class CannonLauncher : MonoBehaviour
 {
     public Rigidbody playerRigidbody;
     public Transform cannonMouth;
     public float launchForce = 1000f;
+    public KeyCode launchKey = KeyCode.Space;
+
+    private bool hasLaunched = false;
 
 
-    private void OnTriggerEnter(Collider other)
+    void Update()
     {
-        LaunchPlayer();
+        if (Input.GetKeyDown(launchKey) && !hasLaunched)
+        {
+            LaunchPlayer();
+        }
     }
 
     void LaunchPlayer()
@@ -22,6 +26,7 @@ public class LaunchPad : MonoBehaviour
             playerRigidbody.angularVelocity = Vector3.zero;
             playerRigidbody.transform.position = cannonMouth.position;
             playerRigidbody.AddForce(cannonMouth.forward * launchForce, ForceMode.Impulse);
+            hasLaunched = true;
         }
     }
 }

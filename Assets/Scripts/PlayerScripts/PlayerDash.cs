@@ -1,104 +1,71 @@
 ﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.UI; // Make sure this is included for UI Image
+using TMPro; // If using TextMeshPro for countdown text
 
 public class PlayerDash : MonoBehaviour
 {
-    //Dash variables
-    public float DashSpeed = 15f;
-    public float DashDuration = 0.3f;
+    public float DashSpeed;
     public float DashCooldown = 3f;
-    private bool IsDashing = false;
-    private float DashTimer = 0f;
-    private Vector3 DashDirection;
+    
+    private Rigidbody rb;
+    private bool isDashing;
+    private bool canDash = true;
+    private float cooldownTimer;
 
-    private bool CanDash = true;
-    private float CooldownTimer = 0f;
-
-    private Rigidbody Rb;
-    public Image DashCooldownBar;
-
-    public Transform Orientation;
+    public Image dashCooldownBar; // Reference to the Image (your circle)
 
     private void Start()
     {
-        Rb = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
+        cooldownTimer = 0;
     }
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(1) && CanDash && !IsDashing)
+        // Dash input (mouse button 1 in this case)
+        if (Input.GetMouseButtonDown(1) && canDash)
         {
-            StartDash();
+            isDashing = true;
+            canDash = false;
+            cooldownTimer = DashCooldown;
+            StartCoroutine(DashCooldownRoutine());
         }
 
-        if (!CanDash)
+        // Update UI Cooldown
+        if (!canDash)
         {
-            // When the dash is on cooldown, decrease the cooldown timer
-            CooldownTimer -= Time.deltaTime;
-            if (CooldownTimer <= 0)
-            {
-                CanDash = true;
-            }
-
-            if (DashCooldownBar != null)
-            {
-                DashCooldownBar.fillAmount = 1 - (CooldownTimer / DashCooldown);
-            }
+            cooldownTimer -= Time.deltaTime;
+            dashCooldownBar.fillAmount = 1 - (cooldownTimer / DashCooldown); // Update circle fill
         }
     }
 
     private void FixedUpdate()
     {
-        if (IsDashing)
-        {
-            DashMovement();
-        }
+        if (isDashing)
+            Dashing();
     }
 
-    private void StartDash()
+    private void Dashing()
     {
-        // Start the dash and set the dash direction and timer
-        IsDashing = true;
-        DashTimer = DashDuration;
+        float horizontalInput = Input.GetAxisRaw("Horizontal");
+        float verticalInput = Input.GetAxisRaw("Vertical");
 
-        float HorizontalInput = Input.GetAxisRaw("Horizontal");
-        float VerticalInput = Input.GetAxisRaw("Vertical");
+        Vector3 inputDirection = new Vector3(horizontalInput, 0, verticalInput).normalized;
 
-        // Dash in the direction of the input
-        if (HorizontalInput == 0 && VerticalInput == 0)
+        if (inputDirection.magnitude > 0)
         {
-            // Dash forward if no input is given
-            DashDirection = Orientation.forward;
-        }
-        else
-        {
-            DashDirection = Orientation.forward * VerticalInput + Orientation.right * HorizontalInput;
+            Vector3 dashDirection = (transform.forward * verticalInput + transform.right * horizontalInput).normalized;
+            rb.AddForce(dashDirection * DashSpeed, ForceMode.Impulse);
         }
 
-        // Temporarily disable gravity to allow for dash movement
-        Rb.useGravity = false;
-
-        // Prevent dashing until the cooldown is over
-        CanDash = false;
-        CooldownTimer = DashCooldown;
+        isDashing = false;
     }
 
-    private void DashMovement()
+    private IEnumerator DashCooldownRoutine()
     {
-        // Dash in the specified direction
-        if (DashTimer > 0)
-        {
-            Rb.velocity = new Vector3(DashDirection.x * DashSpeed, Rb.velocity.y, DashDirection.z * DashSpeed);
-        }
-
-        DashTimer -= Time.fixedDeltaTime;
-
-        if (DashTimer <= 0)
-        {
-            // Set the dash to false and re-enable gravity
-            Rb.useGravity = true;
-            IsDashing = false;
-        }
+        yield return new WaitForSeconds(DashCooldown); // Wait until cooldown is over
+        canDash = true;
+        dashCooldownBar.fillAmount = 0; // Reset circle to empty
     }
 }

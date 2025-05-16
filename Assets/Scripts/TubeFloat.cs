@@ -2,54 +2,45 @@ using UnityEngine;
 
 public class TubeFloat : MonoBehaviour
 {
-    public float LiftSpeed = 15f;
-    public float LaunchForce = 200f;
-    public Transform ExitPoint;
+    public float liftSpeed = 15f;
+    public float launchForce = 200f;
+    public Transform exitPoint;
 
-    public Rigidbody PlayerRigidBody;
-
-    public PlayerShmove playerShmove;
+    public Rigidbody playerRigidBody;
 
     private void OnTriggerEnter(Collider other)
     {
-        //When the player enters the trigger, disable gravity 
         if (other.CompareTag("Player"))
         {
-            Rigidbody Rb = other.GetComponent<Rigidbody>();
+            Rigidbody rb = other.GetComponent<Rigidbody>();
 
-            Rb.useGravity = false;
-            Rb.velocity = Vector3.up * LiftSpeed;
-            //Disable player movement
-            playerShmove.enabled = false;
+            rb.useGravity = false;
+            rb.velocity = Vector3.up * liftSpeed;
         }
     }
 
     private void OnTriggerStay(Collider other)
     {
-        //While the player is inside the trigger, move them upwards
         if (other.CompareTag("Player"))
         {
-            Rigidbody Rb = other.GetComponent<Rigidbody>();
+            Rigidbody rb = other.GetComponent<Rigidbody>();
 
-            Rb.velocity = new Vector3(Rb.velocity.x, LiftSpeed, Rb.velocity.z);
+            rb.velocity = new Vector3(rb.velocity.x, liftSpeed, rb.velocity.z);
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        //When the player exits the trigger, re-enable gravity and launch them in the direction of the exit point
         if (other.CompareTag("Player"))
         {
-            Rigidbody Rb = other.GetComponent<Rigidbody>();
+            Rigidbody rb = other.GetComponent<Rigidbody>();
 
-            Rb.useGravity = true;
-            Vector3 LaunchDirection = (ExitPoint.position - transform.position).normalized;
-            Rb.velocity = LaunchDirection * LaunchForce;
-            PlayerRigidBody.velocity = Vector3.zero;
-            PlayerRigidBody.angularVelocity = Vector3.zero;
-            PlayerRigidBody.AddForce(ExitPoint.forward * LaunchForce, ForceMode.Impulse);
-            //Enable player movement
-            playerShmove.enabled = true;
+            rb.useGravity = true;
+            Vector3 launchDirection = (exitPoint.position - transform.position).normalized;
+            rb.velocity = launchDirection * launchForce;
+            playerRigidBody.velocity = Vector3.zero;
+            playerRigidBody.angularVelocity = Vector3.zero;
+            playerRigidBody.AddForce(exitPoint.forward * launchForce, ForceMode.Impulse);
         }
     }
 }

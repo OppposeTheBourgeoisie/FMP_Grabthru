@@ -7,42 +7,35 @@ public class ItemPickup : MonoBehaviour
     public bool MatchPickup;
     public bool OtherPickup;
     public bool JumpItemPickup;
-    public PlayerShmove playerShmove;
+    public PlayerShmove playerShmove; // Reference to the PlayerShmove script
 
     private void Start()
     {
         MatchPickup = false;
         OtherPickup = false;
         JumpItemPickup = false;
-        playerShmove = FindObjectOfType<PlayerShmove>();
+        playerShmove = FindObjectOfType<PlayerShmove>(); // Automatically find the PlayerShmove script attached to the player
     }
 
     void OnTriggerEnter(Collider other)
     {
-        //Check if the obejct has a specific tag
-        PickupRespawner respawner = other.GetComponent<PickupRespawner>();
-
         if (other.CompareTag("Match"))
         {
+            Destroy(other.gameObject);
             MatchPickedUp();
-            if (respawner != null) respawner.StartRespawn();
-            else Destroy(other.gameObject);
         }
         else if (other.CompareTag("Other"))
         {
+            Destroy(other.gameObject);
             OtherPickedUp();
-            if (respawner != null) respawner.StartRespawn();
-            else Destroy(other.gameObject);
         }
         else if (other.CompareTag("JumpItem"))
         {
+            Destroy(other.gameObject);
             JumpItemPickedUp();
-            if (respawner != null) respawner.StartRespawn();
-            else Destroy(other.gameObject);
         }
     }
 
-    //Methods to see what items have been picked up
     public void MatchPickedUp()
     {
         MatchPickup = true;
@@ -57,9 +50,10 @@ public class ItemPickup : MonoBehaviour
     {
         JumpItemPickup = true;
 
+        // Call the AddJumps method from PlayerShmove to add 3 jumps
         if (playerShmove != null)
         {
-            playerShmove.AddJumps(3);
+            playerShmove.AddJumps(3); // You can adjust the number of jumps as needed
         }
     }
 }
