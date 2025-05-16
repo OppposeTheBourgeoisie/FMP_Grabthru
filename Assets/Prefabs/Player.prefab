@@ -167,10 +167,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23be946886b2b2f47a7de67a17bdfeba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Orientation: {fileID: 7741340141060662967}
+  orientation: {fileID: 7741340141060662967}
   MoveSpeed: 3
   Deceleration: 5
-  Speed: 0
+  speed: 0
   MaxSpeed: 100
 --- !u!114 &7741340141060662988
 MonoBehaviour:
@@ -184,7 +184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ebfb7074bb71094185492846b3aa229, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  JumpForce: 4
+  jumpForce: 4
 --- !u!114 &7741340141060662962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -197,11 +197,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c4f4534cba1c894f8196d8c1ac3afbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SwingKey: 323
-  Lr: {fileID: 7741340141060662966}
+  lr: {fileID: 7741340141060662966}
   GunTip: {fileID: 5680038687583436292}
-  Cam: {fileID: 5680038688897863314}
-  Player: {fileID: 7741340141060662967}
+  cam: {fileID: 5680038688897863314}
+  player: {fileID: 7741340141060662967}
   WhatIsGrappleable:
     serializedVersion: 2
     m_Bits: 64
@@ -221,10 +220,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DashSpeed: 50
-  DashDuration: 0.5
   DashCooldown: 3
-  DashCooldownBar: {fileID: 0}
-  Orientation: {fileID: 7741340141060662967}
+  dashCooldownBar: {fileID: 0}
 --- !u!114 &7741340141060662964
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -237,8 +234,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a172c23e5e6d0e149b50baa52af1694c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StartColor: {r: 0, g: 1, b: 0, a: 1}
-  EndColor: {r: 1, g: 0, b: 0, a: 1}
+  startColor: {r: 0, g: 1, b: 0, a: 1}
+  endColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &7741340141060662965
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -34,17 +34,17 @@
                 },
                 {
                     "name": "Swing",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "428864d9-20a5-41a4-88e0-bccc19f9d7a1",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
                 {
-                    "name": "2D Vector",
+                    "name": "KeyboardMovement",
                     "id": "6e109e9e-9248-42ac-8217-3d4b4d097d8a",
                     "path": "2DVector",
                     "interactions": "",
@@ -100,8 +100,30 @@
                 },
                 {
                     "name": "",
+                    "id": "5eb7ad24-ae5c-4b53-9951-126b2c2733fb",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "29114489-a80a-4acc-9880-f1ce4dcd9cfc",
                     "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "370a6e86-7f8c-4c7c-95ce-ecaeeaf2749d",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -122,8 +144,30 @@
                 },
                 {
                     "name": "",
+                    "id": "3987728a-7648-48d8-ac46-fb0d41523401",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "32ceabd8-a192-4b6b-bb52-2fdf493c9553",
                     "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Swing",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4258a3bf-e5f2-41bc-8774-335d9cfb5be9",
+                    "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

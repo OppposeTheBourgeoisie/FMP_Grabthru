@@ -1,16 +1,16 @@
 using UnityEngine;
-using UnityEngine.UI;  // If using standard Text
-using TMPro;  // Uncomment if using TextMeshPro
+using UnityEngine.UI;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-    public TextMeshProUGUI jumpCountText;  // Uncomment if using TextMeshPro
+    public TextMeshProUGUI jumpCountText;
 
     public PlayerShmove playerShmove;
 
     private void Start()
     {
-        // Find the PlayerShmove script in the scene (if not assigned in the Inspector)
+        // Find the PlayerShmove script in the scene
         playerShmove = FindObjectOfType<PlayerShmove>();
     }
 
@@ -24,12 +24,12 @@ public class UIManager : MonoBehaviour
             // If jumps are 0, hide the text
             if (currentJumps == 0)
             {
-                jumpCountText.gameObject.SetActive(false);  // Hide the text object
+                jumpCountText.gameObject.SetActive(false);
             }
             else
             {
-                jumpCountText.gameObject.SetActive(true);   // Show the text object
-                jumpCountText.text = "Jumps: " + currentJumps.ToString();  // Update the text
+                jumpCountText.gameObject.SetActive(true);
+                jumpCountText.text = "Jumps: " + currentJumps.ToString();
             }
         }
     }
