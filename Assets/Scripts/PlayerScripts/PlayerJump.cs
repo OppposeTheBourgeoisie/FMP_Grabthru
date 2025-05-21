@@ -1,6 +1,6 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerJump : MonoBehaviour
 {
@@ -8,7 +8,18 @@ public class PlayerJump : MonoBehaviour
     public float jumpForce = 2.0f;
 
     private bool isGrounded;
-    Rigidbody rb;
+    private Rigidbody rb;
+
+    private PlayerInputActions inputActions;
+
+    void Awake()
+    {
+        inputActions = new PlayerInputActions();
+        inputActions.Player.Jump.performed += OnJump;
+    }
+
+    void OnEnable() => inputActions.Enable();
+    void OnDisable() => inputActions.Disable();
 
     void Start()
     {
@@ -26,9 +37,9 @@ public class PlayerJump : MonoBehaviour
         isGrounded = false;
     }
 
-    void Update()
+    private void OnJump(InputAction.CallbackContext ctx)
     {
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if (isGrounded)
         {
             rb.AddForce(jump * jumpForce, ForceMode.Impulse);
         }

@@ -26,17 +26,27 @@ public class PlayerShmove : MonoBehaviour
 
     private PlayerInputActions inputActions;
 
+    private bool isGrounded;
+
+    public float airControlMultiplier = 0.3f; // Tune this value (0.2–0.5 is typical)
+
     private void Awake()
     {
-        rb = GetComponent<Rigidbody>();
-        rb.freezeRotation = true;
-        rb.useGravity = true;
-
         inputActions = new PlayerInputActions();
         inputActions.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
         inputActions.Player.Move.canceled += ctx => moveInput = Vector2.zero;
 
         inputActions.Player.Jump.performed += ctx => jumpPressed = true;
+    }
+
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+        rb.freezeRotation = true;
+        rb.useGravity = true;
+        rb.drag = 0f; // Lower drag for more natural movement and falling
+        oldPosition = transform.position;
+        currentJumps = maxJumps;
     }
 
     private void OnEnable() => inputActions.Enable();
@@ -49,19 +59,19 @@ public class PlayerShmove : MonoBehaviour
             Jump();
             jumpPressed = false; // Reset flag
         }
-
-        StopPlayer();
-
-        rb.velocity = new Vector3(
-            Mathf.Clamp(rb.velocity.x, -MaxSpeed, MaxSpeed),
-            rb.velocity.y,
-            Mathf.Clamp(rb.velocity.z, -MaxSpeed, MaxSpeed)
-        );
     }
 
     private void FixedUpdate()
     {
-        MovePlayer();
+        if (moveInput == Vector2.zero)
+        {
+            StopPlayer();
+        }
+        else
+        {
+            MovePlayer();
+        }
+
         ApplyCustomGravity();
 
         speed = Vector3.Distance(oldPosition, transform.position) * 100f;
@@ -71,17 +81,26 @@ public class PlayerShmove : MonoBehaviour
     private void MovePlayer()
     {
         MoveDirection = orientation.forward * moveInput.y + orientation.right * moveInput.x;
-        rb.AddForce(MoveDirection.normalized * MoveSpeed * 5f, ForceMode.Force);
+        float control = isGrounded ? 1f : airControlMultiplier;
+        rb.AddForce(MoveDirection.normalized * MoveSpeed * control, ForceMode.VelocityChange);
+
+        // Clamp horizontal speed
+        Vector3 horizontalVelocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+        if (horizontalVelocity.magnitude > MaxSpeed)
+        {
+            horizontalVelocity = horizontalVelocity.normalized * MaxSpeed;
+            rb.velocity = new Vector3(horizontalVelocity.x, rb.velocity.y, horizontalVelocity.z);
+        }
     }
 
     private void StopPlayer()
     {
-        if (moveInput == Vector2.zero)
+        if (isGrounded)
         {
-            Vector3 currentVelocity = rb.velocity;
-            currentVelocity.x = Mathf.MoveTowards(currentVelocity.x, 0, Deceleration * Time.fixedDeltaTime);
-            currentVelocity.z = Mathf.MoveTowards(currentVelocity.z, 0, Deceleration * Time.fixedDeltaTime);
-            rb.velocity = currentVelocity;
+            Vector3 horizontalVelocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+            float friction = Deceleration * 5f; // Increase multiplier for stronger stop
+            horizontalVelocity = Vector3.MoveTowards(horizontalVelocity, Vector3.zero, friction * Time.fixedDeltaTime);
+            rb.velocity = new Vector3(horizontalVelocity.x, rb.velocity.y, horizontalVelocity.z);
         }
     }
 
@@ -110,6 +129,18 @@ public class PlayerShmove : MonoBehaviour
         {
             // Do nothing
         }
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+            isGrounded = true;
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+            isGrounded = false;
     }
 
     public void AddJumps(int extraJumps)

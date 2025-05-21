@@ -21,13 +21,25 @@ public class RopeSwing : MonoBehaviour
     public bool AbleToGrapple = false;
 
     private PlayerInputActions inputActions;
-    private bool swingPressed;
+
+    public AudioSource swingAudio;
+    public float minVolume = 0.1f;
+    public float maxVolume = 1.0f;
+    public float maxSpeedForVolume = 30f; // The speed at which volume is maxed out
+
+    private PlayerShmove playerShmove;
+
+    public ParticleSystem speedEffect;
+    public float speedEffectThreshold = 20f; // Set this to the speed you want the effect to trigger
 
     private void Awake()
     {
         inputActions = new PlayerInputActions();
-        inputActions.Player.Swing.performed += ctx => swingPressed = true;
-        inputActions.Player.Swing.canceled += ctx => swingPressed = false;
+        inputActions.Player.Swing.started += ctx => StartSwing();
+        inputActions.Player.Swing.canceled += ctx => StopSwing();
+
+        if (player != null)
+            playerShmove = player.GetComponent<PlayerShmove>();
     }
 
     private void OnEnable() => inputActions.Enable();
@@ -35,10 +47,36 @@ public class RopeSwing : MonoBehaviour
 
     void Update()
     {
-        if (swingPressed && joint == null) StartSwing();
-        if (!swingPressed && joint != null) StopSwing();
-
         CheckForSwingPoints();
+
+        // Adjust swing sound volume based on player speed
+        if (joint != null && swingAudio != null && playerShmove != null)
+        {
+            if (!swingAudio.isPlaying)
+                swingAudio.Play();
+
+            float speed01 = Mathf.Clamp01(playerShmove.speed / maxSpeedForVolume);
+            swingAudio.volume = Mathf.Lerp(minVolume, maxVolume, speed01);
+        }
+        else if (swingAudio != null && swingAudio.isPlaying)
+        {
+            swingAudio.Stop();
+        }
+
+        // Check if the speed effect should be played
+        if (playerShmove != null && speedEffect != null)
+        {
+            if (playerShmove.speed >= speedEffectThreshold)
+            {
+                if (!speedEffect.isPlaying)
+                    speedEffect.Play();
+            }
+            else
+            {
+                if (speedEffect.isPlaying)
+                    speedEffect.Stop();
+            }
+        }
     }
 
     void StartSwing()

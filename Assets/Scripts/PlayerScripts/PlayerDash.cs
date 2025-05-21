@@ -20,6 +20,8 @@ public class PlayerDash : MonoBehaviour
     private Vector2 moveInput;
     private bool dashPressed;
 
+    public ParticleSystem dashEffect;
+
     private void Awake()
     {
         inputActions = new PlayerInputActions();
@@ -46,6 +48,12 @@ public class PlayerDash : MonoBehaviour
             canDash = false;
             cooldownTimer = DashCooldown;
             StartCoroutine(DashCooldownRoutine());
+
+            if (dashEffect != null)
+            {
+                dashEffect.Play();
+                StartCoroutine(StopDashEffectAfterTime(0.2f)); // Adjust duration as needed
+            }
         }
         dashPressed = false; // Reset flag
 
@@ -81,5 +89,14 @@ public class PlayerDash : MonoBehaviour
         yield return new WaitForSeconds(DashCooldown);
         canDash = true;
         dashCooldownBar.fillAmount = 0;
+    }
+
+    private IEnumerator StopDashEffectAfterTime(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        if (dashEffect != null)
+        {
+            dashEffect.Stop();
+        }
     }
 }

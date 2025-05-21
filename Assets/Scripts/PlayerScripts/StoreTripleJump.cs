@@ -41,7 +41,7 @@ public class StoreTripleJump : MonoBehaviour
         if (isGrounded || storedJumps > 0)
         {
             rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z); // Reset vertical velocity
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
 
             if (!isGrounded)
             {
