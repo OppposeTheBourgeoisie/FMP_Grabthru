@@ -4980,7 +4980,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   orientation: {fileID: 7741340141060662967}
+<<<<<<< HEAD
   MoveSpeed: 1
+=======
+  MoveSpeed: 3
+>>>>>>> c0b8d4f5f58296da443441af140f39f3b779bc47
   Deceleration: 5
   speed: 0
   MaxSpeed: 100
@@ -5041,7 +5045,10 @@ MonoBehaviour:
   DashSpeed: 50
   DashCooldown: 3
   dashCooldownBar: {fileID: 0}
+<<<<<<< HEAD
   dashEffect: {fileID: 2016840802}
+=======
+>>>>>>> c0b8d4f5f58296da443441af140f39f3b779bc47
 --- !u!114 &7741340141060662964
 MonoBehaviour:
   m_ObjectHideFlags: 0

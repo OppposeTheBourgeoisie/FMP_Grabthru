@@ -56,11 +56,12 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Swing"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""428864d9-20a5-41a4-88e0-bccc19f9d7a1"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
+<<<<<<< HEAD
                     ""initialStateCheck"": false
                 },
                 {
@@ -70,12 +71,14 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
+=======
+>>>>>>> c0b8d4f5f58296da443441af140f39f3b779bc47
                     ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
                 {
-                    ""name"": ""2D Vector"",
+                    ""name"": ""KeyboardMovement"",
                     ""id"": ""6e109e9e-9248-42ac-8217-3d4b4d097d8a"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
@@ -131,7 +134,11 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+<<<<<<< HEAD
                     ""id"": ""c537a195-2ad9-4b51-9703-45fc29a5ca60"",
+=======
+                    ""id"": ""5eb7ad24-ae5c-4b53-9951-126b2c2733fb"",
+>>>>>>> c0b8d4f5f58296da443441af140f39f3b779bc47
                     ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -153,7 +160,11 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+<<<<<<< HEAD
                     ""id"": ""54ccb09d-fbc1-4275-ab71-d587da6a18f3"",
+=======
+                    ""id"": ""370a6e86-7f8c-4c7c-95ce-ecaeeaf2749d"",
+>>>>>>> c0b8d4f5f58296da443441af140f39f3b779bc47
                     ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -175,8 +186,13 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+<<<<<<< HEAD
                     ""id"": ""926b93ef-b877-425e-b39b-ed6d612a7dcd"",
                     ""path"": ""<Gamepad>/buttonWest"",
+=======
+                    ""id"": ""3987728a-7648-48d8-ac46-fb0d41523401"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+>>>>>>> c0b8d4f5f58296da443441af140f39f3b779bc47
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -197,7 +213,11 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+<<<<<<< HEAD
                     ""id"": ""90bc2129-7588-412a-95c2-f631b6a1cf9e"",
+=======
+                    ""id"": ""4258a3bf-e5f2-41bc-8774-335d9cfb5be9"",
+>>>>>>> c0b8d4f5f58296da443441af140f39f3b779bc47
                     ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -205,6 +225,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""action"": ""Swing"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+<<<<<<< HEAD
                 },
                 {
                     ""name"": """",
@@ -227,6 +248,8 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""action"": ""Camera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+=======
+>>>>>>> c0b8d4f5f58296da443441af140f39f3b779bc47
                 }
             ]
         }

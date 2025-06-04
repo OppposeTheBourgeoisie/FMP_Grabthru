@@ -1438,6 +1438,7 @@ Transform:
   m_Father: {fileID: 1932855508}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD
 --- !u!1 &967878536
 GameObject:
   m_ObjectHideFlags: 0
@@ -6308,6 +6309,8 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+=======
+>>>>>>> c0b8d4f5f58296da443441af140f39f3b779bc47
 --- !u!4 &1042245769 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4181416119813944651, guid: f69850acdb44bd14aac9dc27a4679711, type: 3}
@@ -8550,6 +8553,7 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 127889721}
     - target: {fileID: 7741340141060662963, guid: f896873066f949f4b86b4d7a634e5757, type: 3}
+<<<<<<< HEAD
       propertyPath: DashSpeed
       value: 20
       objectReference: {fileID: 0}
@@ -8557,6 +8561,15 @@ PrefabInstance:
       propertyPath: dashCooldownBar
       value: 
       objectReference: {fileID: 1547310836}
+=======
+      propertyPath: dashCooldownBar
+      value: 
+      objectReference: {fileID: 792945422}
+    - target: {fileID: 7741340141060662965, guid: f896873066f949f4b86b4d7a634e5757, type: 3}
+      propertyPath: JumpItemPickup
+      value: 0
+      objectReference: {fileID: 0}
+>>>>>>> c0b8d4f5f58296da443441af140f39f3b779bc47
     - target: {fileID: 7741340141060662967, guid: f896873066f949f4b86b4d7a634e5757, type: 3}
       propertyPath: m_RootOrder
       value: 0
