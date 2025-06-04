@@ -1,26 +1,31 @@
-
 using UnityEngine;
 
 [ExecuteInEditMode]
 public class RingDistortionEffect : MonoBehaviour
 {
+    [Header("References")]
     public Material distortionMat;
+
+    [Header("Distortion Settings")]
     public float speed = 1.0f;
     public float maxRingSize = 2.0f;
+
     private float ringSize = 0f;
     private bool isActive = false;
 
     void Start()
     {
+        // Initialize the distortion material values
         if (distortionMat != null)
         {
             distortionMat.SetFloat("_RingSize", 0f);
-            distortionMat.SetFloat("_DistortionStrength", 0f); // <<< this clears it
+            distortionMat.SetFloat("_DistortionStrength", 0f);
         }
     }
 
     void Update()
     {
+        // Animate the ring distortion if active
         if (!isActive || distortionMat == null) return;
 
         ringSize += Time.deltaTime * speed;
@@ -38,6 +43,7 @@ public class RingDistortionEffect : MonoBehaviour
 
     public void TriggerDistortion()
     {
+        // Start the ring distortion effect
         ringSize = 0f;
         distortionMat.SetFloat("_RingSize", ringSize);
         distortionMat.SetFloat("_RingWidth", 0.15f);
@@ -48,6 +54,7 @@ public class RingDistortionEffect : MonoBehaviour
 
     void OnRenderImage(RenderTexture src, RenderTexture dest)
     {
+        // Apply the distortion material as a post-process effect
         if (distortionMat != null)
             Graphics.Blit(src, dest, distortionMat);
         else

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class LineRendererColour : MonoBehaviour
 {
+    // Script stolen from https://docs.unity3d.com/ScriptReference/LineRenderer-colorGradient.html
     public Color startColor = Color.green;
     public Color endColor = Color.red;
 

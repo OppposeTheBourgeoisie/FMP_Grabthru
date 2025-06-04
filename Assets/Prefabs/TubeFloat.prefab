@@ -113,7 +113,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   liftSpeed: 15
-  launchForce: 200
+  launchForce: 50
   exitPoint: {fileID: 8946887459915904480}
   playerRigidBody: {fileID: 0}
 --- !u!1 &7876330235193205131

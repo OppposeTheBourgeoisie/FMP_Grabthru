@@ -10,11 +10,13 @@ public class PressurePadInteract : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        // Check for collision
         SteppedOn();
     }
 
     void SteppedOn()
     {
+        // Open the door when the player steps on the pressure pad
         timedDoor.OpenDoor();
     }
 }

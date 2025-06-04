@@ -7,18 +7,20 @@ public class ItemPickup : MonoBehaviour
     public bool MatchPickup;
     public bool OtherPickup;
     public bool JumpItemPickup;
-    public PlayerShmove playerShmove; // Reference to the PlayerShmove script
+    public PlayerShmove playerShmove;
 
     private void Start()
     {
+        // Initialize pickup states and find PlayerShmove reference
         MatchPickup = false;
         OtherPickup = false;
         JumpItemPickup = false;
-        playerShmove = FindObjectOfType<PlayerShmove>(); // Automatically find the PlayerShmove script attached to the player
+        playerShmove = FindObjectOfType<PlayerShmove>();
     }
 
     void OnTriggerEnter(Collider other)
     {
+        // Handle pickup based on collider tag
         if (other.CompareTag("Match"))
         {
             Destroy(other.gameObject);
@@ -36,6 +38,7 @@ public class ItemPickup : MonoBehaviour
         }
     }
 
+    // Methods to set pickup states
     public void MatchPickedUp()
     {
         MatchPickup = true;
@@ -48,12 +51,11 @@ public class ItemPickup : MonoBehaviour
 
     public void JumpItemPickedUp()
     {
+        // Set jump item pickup state and add jumps to player
         JumpItemPickup = true;
-
-        // Call the AddJumps method from PlayerShmove to add 3 jumps
         if (playerShmove != null)
         {
-            playerShmove.AddJumps(3); // You can adjust the number of jumps as needed
+            playerShmove.AddJumps(3);
         }
     }
 }

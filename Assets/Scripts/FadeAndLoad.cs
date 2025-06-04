@@ -14,6 +14,7 @@ public class FadeAndLoad : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        // Load the scene and begin screen fade
         if (!hasFaded && other.CompareTag("Player"))
         {
             hasFaded = true;
@@ -23,6 +24,7 @@ public class FadeAndLoad : MonoBehaviour
 
     private IEnumerator FadeOutAndLoad()
     {
+        // Fade out the image and load the next scene
         float elapsed = 0f;
         Color color = fadeImage.color;
 

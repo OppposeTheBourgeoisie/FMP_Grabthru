@@ -13,29 +13,24 @@ public class CutsceneManager : MonoBehaviour
 
     private void Start()
     {
-        cutsceneText.alpha = 0f; // Start fully transparent
+        // Start with text invisible and begin cutscene sequence
+        cutsceneText.alpha = 0f;
         StartCoroutine(PlayCutscene());
     }
 
     private IEnumerator PlayCutscene()
     {
-        // Fade in
+        // Fade in, hold, fade out, then load next scene
         yield return StartCoroutine(FadeText(0f, 1f, fadeDuration));
-
-        // Hold
         yield return new WaitForSeconds(holdDuration);
-
-        // Fade out
         yield return StartCoroutine(FadeText(1f, 0f, fadeDuration));
-
-        // Load next scene
         SceneManager.LoadScene(nextSceneName);
     }
 
     private IEnumerator FadeText(float from, float to, float duration)
     {
+        // Lerp the alpha of the text over time
         float elapsed = 0f;
-
         while (elapsed < duration)
         {
             float t = elapsed / duration;
@@ -43,7 +38,6 @@ public class CutsceneManager : MonoBehaviour
             elapsed += Time.deltaTime;
             yield return null;
         }
-
         cutsceneText.alpha = to;
     }
 }

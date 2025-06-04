@@ -1,50 +1,58 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField] private Transform target;  // Reference to the player's transform
-    [SerializeField] private float XSens = 10f;  // Mouse X sensitivity
-    [SerializeField] private float YSens = 10f;  // Mouse Y sensitivity
+    [SerializeField] private Transform target;
+    [SerializeField] private float XSens = 10f;
+    [SerializeField] private float YSens = 10f;
 
-    private Vector3 offset; // Offset between the camera and player
-    private float XRotation = 0f;  // Rotation on X-axis (up/down, pitch)
-    private float YRotation = 0f;  // Rotation on Y-axis (left/right, yaw)
+    private Vector3 offset;
+    private float XRotation = 0f;
+    private float YRotation = 0f;
+
+    private PlayerInputActions inputActions;
+    private Vector2 lookInput;
+
+    private void Awake()
+    {
+        // Setup input actions for camera look
+        inputActions = new PlayerInputActions();
+        inputActions.Player.Camera.performed += ctx => lookInput = ctx.ReadValue<Vector2>();
+        inputActions.Player.Camera.canceled += ctx => lookInput = Vector2.zero;
+    }
+
+    private void OnEnable() => inputActions.Enable();
+
+    private void OnDisable() => inputActions.Disable();
 
     private void Start()
     {
-        // Calculate the initial offset between the camera and player (at head level)
+        // Calculate the initial offset and lock the cursor
         offset = transform.position - target.position;
-
-        // Lock the cursor in the middle of the screen and hide it for first-person control
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
     private void Update()
     {
-        // Get mouse input for rotation
-        float mouseX = Input.GetAxisRaw("Mouse X") * XSens * Time.deltaTime;
-        float mouseY = Input.GetAxisRaw("Mouse Y") * YSens * Time.deltaTime;
+        // Handle camera rotation based on input
+        float mouseX = lookInput.x * XSens * Time.deltaTime;
+        float mouseY = lookInput.y * YSens * Time.deltaTime;
 
-        // Update Y-axis rotation (for horizontal camera movement)
         YRotation += mouseX;
-
-        // Update X-axis rotation (for vertical camera movement)
         XRotation -= mouseY;
-        XRotation = Mathf.Clamp(XRotation, -90f, 90f);  // Prevent flipping upside down
+        XRotation = Mathf.Clamp(XRotation, -90f, 90f);
 
-        // Apply rotation to the camera
         transform.rotation = Quaternion.Euler(XRotation, YRotation, 0f);
-
-        // Update player body rotation (yaw) to follow camera's horizontal movement
         target.rotation = Quaternion.Euler(0f, YRotation, 0f);
     }
 
     private void LateUpdate()
     {
-        // Keep the camera at the fixed offset from the player (at head level)
+        // Keep the camera at the fixed offset from the player
         transform.position = target.position + offset;
     }
 }

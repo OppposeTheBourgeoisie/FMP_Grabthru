@@ -1,37 +1,32 @@
 using UnityEngine;
-using TMPro;  // Make sure you have TextMeshPro package
+using TMPro;
 
 public class TimedDoor : MonoBehaviour
 {
-    public float openTime = 3f; // Time door stays open
-    public Vector3 openOffset = new Vector3(0, 5, 0); // How far the door moves when opened
+    [Header("Door Settings")]
+    public float openTime = 3f;
+    public Vector3 openOffset = new Vector3(0, 5, 0);
+    public ItemPickup itemPickup;
+
     private Vector3 closedPosition;
     private Vector3 openPosition;
     private bool isOpening = false;
-
-    public ItemPickup itemPickup;
-
-    // Reference to TextMeshPro attached to the door
     private TextMeshPro doorText;
     private float timeRemaining;
 
     void Start()
     {
+        // Initialize closed and open positions
         closedPosition = transform.position;
         openPosition = closedPosition + openOffset;
-
-        // Find and assign the TextMeshPro component attached to the door
-        doorText = GetComponentInChildren<TextMeshPro>(); 
-
-        // Initialize the text to be empty initially
+        doorText = GetComponentInChildren<TextMeshPro>();
         if (doorText != null)
-        {
             doorText.text = "";
-        }
     }
 
     public void OpenDoor()
     {
+        // Sees if the door can be opened
         if (!isOpening)
         {
             isOpening = true;
@@ -42,7 +37,7 @@ public class TimedDoor : MonoBehaviour
 
     private System.Collections.IEnumerator OpenAndClose()
     {
-        // Start opening the door
+        // Open the door with animation
         float time = 0;
         while (time < 0.5f)
         {
@@ -52,31 +47,28 @@ public class TimedDoor : MonoBehaviour
         }
         transform.position = openPosition;
 
-        // Show the remaining time text and set the countdown
+        // Show countdown text while door is open
         if (doorText != null)
         {
             timeRemaining = openTime;
-            doorText.text = Mathf.Ceil(timeRemaining).ToString() + "s";  // Show initial time remaining
+            doorText.text = Mathf.Ceil(timeRemaining).ToString() + "s";
         }
 
-        // Countdown while the door is open
         while (timeRemaining > 0f)
         {
             timeRemaining -= Time.deltaTime;
-            doorText.text = Mathf.Ceil(timeRemaining).ToString() + "s";  // Update text with remaining time
+            if (doorText != null)
+                doorText.text = Mathf.Ceil(timeRemaining).ToString() + "s";
             yield return null;
         }
 
-        // Hide the text once the door closes
+        // Hide the text and wait before closing
         if (doorText != null)
-        {
             doorText.text = "";
-        }
 
-        // Wait before closing the door
         yield return new WaitForSeconds(0.5f);
 
-        // Start closing the door
+        // Close the door with animation
         time = 0;
         while (time < 0.5f)
         {

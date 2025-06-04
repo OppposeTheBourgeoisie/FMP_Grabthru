@@ -13,11 +13,12 @@ public class SoundEffect
     [Range(0.5f, 2.0f)] public float MinPitch = 0.9f;
     [Range(0.5f, 2.0f)] public float MaxPitch = 1.1f;
 
-    public bool Loop = false; // Enable/disable looping
-    public float LoopDuration = 5f; // Duration to loop in seconds
+    public bool Loop = false;
+    public float LoopDuration = 5f;
 
     public AudioClip GetRandomClip()
     {
+        // Plays a random clip from the array of clips
         if (Clips == null || Clips.Length == 0)
             return null;
         return Clips[Random.Range(0, Clips.Length)];
@@ -25,6 +26,7 @@ public class SoundEffect
 
     public float GetPitch()
     {
+        // Randomizes the pitch if enabled, otherwise it's always 1
         return RandomizePitch ? Random.Range(MinPitch, MaxPitch) : 1f;
     }
 }
