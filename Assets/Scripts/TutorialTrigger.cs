@@ -1,5 +1,5 @@
 using UnityEngine;
-using TMPro;  // TextMeshPro namespace
+using TMPro;
 
 public class TutorialTrigger : MonoBehaviour
 {
@@ -12,7 +12,7 @@ public class TutorialTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider Other)
     {
-        //See if the player has seen the message before
+        //See if the player has seen the message before and shows the tutorial text if not
         if (Other.CompareTag("Player") && !TutorialShown)
         {
             ShowTutorialText();
@@ -29,13 +29,12 @@ public class TutorialTrigger : MonoBehaviour
         }
 
         TutorialShown = true;
-
-        //Hide the text
         Invoke("HideTutorialText", TutorialDisplayTime);
     }
 
     private void HideTutorialText()
     {
+        // Hide the tutorial message after a delay
         TutorialText.gameObject.SetActive(false);
     }
 }

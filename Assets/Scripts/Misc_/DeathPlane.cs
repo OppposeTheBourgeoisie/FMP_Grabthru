@@ -9,6 +9,7 @@ public class DeathPlane : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        // Check if the player collided with the death plane
         if (other.CompareTag(playerTag))
         {
             Respawn(other.gameObject);
@@ -17,6 +18,7 @@ public class DeathPlane : MonoBehaviour
 
     void Respawn(GameObject player)
     {
+        // Respawn the player at the referenced respawn point, also resetting velocity
         if (respawnPoint != null)
         {
             player.transform.position = respawnPoint.position;

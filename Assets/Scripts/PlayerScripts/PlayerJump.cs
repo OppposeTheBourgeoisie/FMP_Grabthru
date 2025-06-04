@@ -4,12 +4,11 @@ using UnityEngine.InputSystem;
 
 public class PlayerJump : MonoBehaviour
 {
-    private Vector3 jump;
     public float jumpForce = 2.0f;
 
+    private Vector3 jump;
     private bool isGrounded;
     private Rigidbody rb;
-
     private PlayerInputActions inputActions;
 
     void Awake()
@@ -23,6 +22,7 @@ public class PlayerJump : MonoBehaviour
 
     void Start()
     {
+        // Get Rigidbody and set jump vector
         rb = GetComponent<Rigidbody>();
         jump = new Vector3(0.0f, 2.0f, 0.0f);
     }
@@ -34,11 +34,13 @@ public class PlayerJump : MonoBehaviour
 
     private void OnCollisionExit(Collision collision)
     {
+        // Unset grounded state when leaving ground
         isGrounded = false;
     }
 
     private void OnJump(InputAction.CallbackContext ctx)
     {
+        // Perform jump if grounded
         if (isGrounded)
         {
             rb.AddForce(jump * jumpForce, ForceMode.Impulse);

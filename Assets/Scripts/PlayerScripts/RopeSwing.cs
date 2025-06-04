@@ -5,33 +5,33 @@ using UnityEngine.InputSystem;
 
 public class RopeSwing : MonoBehaviour
 {
+    // Script referenced from https://www.youtube.com/watch?v=HPjuTK91MA8
+    [Header("References")]
     public LineRenderer lr;
     public Transform GunTip, cam, player;
     public LayerMask WhatIsGrappleable;
+    public AudioSource swingAudio;
+    public ParticleSystem speedEffect;
+    public Transform PredictionPoint;
+
+    [Header("Swing Settings")]
+    public float PredictionSphereCastRadius;
+    public float minVolume = 0.1f;
+    public float maxVolume = 1.0f;
+    public float maxSpeedForVolume = 30f;
+    public float speedEffectThreshold = 200f;
 
     private float MaxSwingDistance = 50f;
     private Vector3 SwingPoint;
     private SpringJoint joint;
     private Vector3 CurrentGrapplePosition;
-
     public RaycastHit PredictionHit;
-    public float PredictionSphereCastRadius;
-    public Transform PredictionPoint;
-
     public bool AbleToGrapple = false;
 
     private PlayerInputActions inputActions;
-
-    public AudioSource swingAudio;
-    public float minVolume = 0.1f;
-    public float maxVolume = 1.0f;
-    public float maxSpeedForVolume = 30f; // The speed at which volume is maxed out
-
     private PlayerShmove playerShmove;
 
-    public ParticleSystem speedEffect;
-    public float speedEffectThreshold = 20f; // Set this to the speed you want the effect to trigger
-
+    // Setup input actions and references
     private void Awake()
     {
         inputActions = new PlayerInputActions();
@@ -40,9 +40,13 @@ public class RopeSwing : MonoBehaviour
 
         if (player != null)
             playerShmove = player.GetComponent<PlayerShmove>();
+
+        if (speedEffect != null)
+            speedEffect.Stop();
     }
 
     private void OnEnable() => inputActions.Enable();
+
     private void OnDisable() => inputActions.Disable();
 
     void Update()
@@ -63,7 +67,7 @@ public class RopeSwing : MonoBehaviour
             swingAudio.Stop();
         }
 
-        // Check if the speed effect should be played
+        // Play speed effect if player is fast enough
         if (playerShmove != null && speedEffect != null)
         {
             if (playerShmove.speed >= speedEffectThreshold)
@@ -81,6 +85,7 @@ public class RopeSwing : MonoBehaviour
 
     void StartSwing()
     {
+        // If the player can grapple, start the swing
         if (PredictionHit.point == Vector3.zero) return;
 
         RaycastHit hit;
@@ -97,6 +102,9 @@ public class RopeSwing : MonoBehaviour
             return;
         }
 
+        AudioSystem.Instance.PlaySound("RopeSwing");
+
+        // Create a spring joint to simulate the swing
         joint = player.gameObject.AddComponent<SpringJoint>();
         joint.autoConfigureConnectedAnchor = false;
         joint.connectedAnchor = SwingPoint;
@@ -115,6 +123,7 @@ public class RopeSwing : MonoBehaviour
 
     void StopSwing()
     {
+        // If the player is swinging, stop the swing and reset the line renderer
         lr.positionCount = 0;
         if (joint != null)
         {
@@ -136,6 +145,7 @@ public class RopeSwing : MonoBehaviour
 
     void DrawRope()
     {
+        // Use a line renderer to draw a rope
         if (joint == null) return;
         CurrentGrapplePosition = Vector3.Lerp(CurrentGrapplePosition, SwingPoint, Time.deltaTime * 8f);
         lr.SetPosition(0, GunTip.position);
@@ -144,6 +154,7 @@ public class RopeSwing : MonoBehaviour
 
     void CheckForSwingPoints()
     {
+        // Check if the player is able to grapple and predict the swing point
         if (joint != null || PredictionPoint == null) return;
 
         bool wasActive = PredictionPoint.gameObject.activeSelf;

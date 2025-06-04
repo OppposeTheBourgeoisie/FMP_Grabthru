@@ -5,27 +5,27 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour
 {
+    // Loads scenes based on button clicks in the UI
     public void StartGame()
     {
-        SceneManager.LoadScene("Level1"); // Load the main menu scene
+        SceneManager.LoadScene("IntroScene");
     }
 
     public void LoadControls()
     {
-        SceneManager.LoadScene("ControlScene"); // Load the controls scene
+        SceneManager.LoadScene("ControlScene");
     }
 
     public void LoadMainMenu()
     {
-        SceneManager.LoadScene("MainMenu"); // Load the main menu scene
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void QuitGame()
     {
-        // Quit the application
+        // Quit the application or stop the scene in the editor
         Application.Quit();
 
-        // If running in the editor, stop playing the scene
         #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
         #endif

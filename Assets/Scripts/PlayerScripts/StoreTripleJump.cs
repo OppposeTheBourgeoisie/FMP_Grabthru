@@ -2,10 +2,11 @@ using UnityEngine;
 
 public class StoreTripleJump : MonoBehaviour
 {
-    public float jumpForce = 10f; // Force of each jump
-    public int maxStoredJumps = 3; // Maximum stored jumps
-    public float groundCheckDistance = 0.2f; // Distance for ground detection
-    public LayerMask groundLayer; // Set this to "Ground" layer in Inspector
+    [Header("Jump Settings")]
+    public float jumpForce = 10f;
+    public int maxStoredJumps = 3;
+    public float groundCheckDistance = 0.2f;
+    public LayerMask groundLayer;
 
     private Rigidbody rb;
     private int storedJumps = 0;
@@ -18,12 +19,8 @@ public class StoreTripleJump : MonoBehaviour
 
     void Update()
     {
+        // Check if grounded and handle jump input
         CheckGround();
-
-        if (isGrounded)
-        {
-            storedJumps = maxStoredJumps; // Reset stored jumps when landing
-        }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -33,20 +30,31 @@ public class StoreTripleJump : MonoBehaviour
 
     void CheckGround()
     {
+        // Raycast down to check if player is grounded
         isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
     }
 
     void PerformJump()
     {
+        // Perform a jump if grounded or has stored jumps
         if (isGrounded || storedJumps > 0)
         {
-            rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z); // Reset vertical velocity
+            rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
             rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
 
             if (!isGrounded)
             {
-                storedJumps--; // Consume a stored jump
+                storedJumps--;
             }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // Refill stored jumps when picking up a JumpItem
+        if (other.CompareTag("JumpItem"))
+        {
+            storedJumps = maxStoredJumps;
         }
     }
 }

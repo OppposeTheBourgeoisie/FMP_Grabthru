@@ -4,27 +4,26 @@ public class BulletMovement : MonoBehaviour
 {
     public float Speed = 10f;
     public float Lifetime = 5f;
-    private Rigidbody rb;
-
     public LayerMask CollisionLayer;
-    private Transform respawnLocation;
-
     public ParticleSystem BulletEffect;
+
+    private Rigidbody rb;
+    private Transform respawnLocation;
 
     void Start()
     {
+        // Set bullet velocity and schedule destruction
         rb = GetComponent<Rigidbody>();
-
         if (rb != null)
         {
             rb.velocity = transform.forward * Speed;
         }
-
         Destroy(gameObject, Lifetime);
     }
 
     void OnCollisionEnter(Collision other)
     {
+        // Handle collision with player and play effect
         if (other.gameObject.CompareTag("Player"))
         {
             FindRespawnLocation();
@@ -47,11 +46,13 @@ public class BulletMovement : MonoBehaviour
 
     void FindRespawnLocation()
     {
+        // Find the respawn point in the scene
         respawnLocation = GameObject.FindWithTag("RespawnPoint")?.transform;
     }
 
     void TeleportPlayer(GameObject player)
     {
+        // Teleport the player to the respawn location
         if (respawnLocation != null)
         {
             player.transform.position = respawnLocation.position;
