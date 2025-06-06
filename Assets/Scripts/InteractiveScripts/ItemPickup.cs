@@ -20,7 +20,7 @@ public class ItemPickup : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        // Handle pickup based on collider tag
+        // Handle pickup based on tag
         if (other.CompareTag("Match"))
         {
             Destroy(other.gameObject);

@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour
 {
+    [Header("Camera Settings")]
     [SerializeField] private Transform target;
     [SerializeField] private float XSens = 10f;
     [SerializeField] private float YSens = 10f;

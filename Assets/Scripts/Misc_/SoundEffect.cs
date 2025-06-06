@@ -5,6 +5,7 @@ using System.Collections.Generic;
 [System.Serializable]
 public class SoundEffect
 {
+    // Class for audio files that go into a list in the Audio System
     public string Name;
     public AudioClip[] Clips;
     public AudioMixerGroup MixerGroup;

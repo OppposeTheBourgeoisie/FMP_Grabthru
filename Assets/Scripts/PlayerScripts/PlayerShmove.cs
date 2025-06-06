@@ -30,7 +30,7 @@ public class PlayerShmove : MonoBehaviour
 
     private void Awake()
     {
-        // Setup input actions and references
+        // Initialize input actions and references
         inputActions = new PlayerInputActions();
         inputActions.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
         inputActions.Player.Move.canceled += ctx => moveInput = Vector2.zero;
@@ -53,7 +53,7 @@ public class PlayerShmove : MonoBehaviour
 
     private void Update()
     {
-        // Handle jump input
+        // Handle triple jump input
         if (jumpPressed && currentJumps > 0)
         {
             Jump();
@@ -116,7 +116,7 @@ public class PlayerShmove : MonoBehaviour
 
     private void Jump()
     {
-        // Handle jumping and reset vertical velocity
+        // Jumping logic when you have the triple jump
         rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
         rb.AddForce(Vector3.up * 10f, ForceMode.Impulse);
         currentJumps--;
